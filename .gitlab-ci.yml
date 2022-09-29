@@ -1,0 +1,242 @@
+variables:
+  THOR_MASTER_IMAGE: $CI_REGISTRY_IMAGE:master
+  THOR_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+  THOR_BRANCH_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  THOR_DOCKERFILE: dockerfile/Dockerfile.thor
+
+  LAB4_HARBOR_REGISTRY: lab4-registry.corp.ailabs.tw
+  THOR_MASTER_AGGREGATOR_IMAGE: $CI_REGISTRY_IMAGE/aggregator:master
+  THOR_MASTER_AGGREGATOR_LAB4_IMAGE: $LAB4_HARBOR_REGISTRY/group-medical/harmonia/tmi-aggregator:master
+  THOR_MASTER_EDGE_IMAGE: $CI_REGISTRY_IMAGE/edge:master
+  THOR_MASTER_EDGE_LAB4_IMAGE: $LAB4_HARBOR_REGISTRY/group-medical/harmonia/tmi-thor/fed-learning-edge:master
+  THOR_RELEASE_AGGREGATOR_IMAGE: $CI_REGISTRY_IMAGE/aggregator:$CI_COMMIT_TAG
+  THOR_RELEASE_AGGREGATOR_LAB4_IMAGE: $LAB4_HARBOR_REGISTRY/group-medical/harmonia/tmi-aggregator:$CI_COMMIT_TAG
+  THOR_RELEASE_EDGE_IMAGE: $CI_REGISTRY_IMAGE/edge:$CI_COMMIT_TAG
+  THOR_RELEASE_EDGE_LAB4_IMAGE: $LAB4_HARBOR_REGISTRY/group-medical/harmonia/tmi-thor/fed-learning-edge:$CI_COMMIT_TAG
+  THOR_BRANCH_AGGREGATOR_IMAGE: $CI_REGISTRY_IMAGE/aggregator:$CI_COMMIT_REF_NAME
+  THOR_BRANCH_AGGREGATOR_LAB4_IMAGE: $LAB4_HARBOR_REGISTRY/group-medical/harmonia/tmi-aggregator:$CI_COMMIT_REF_NAME
+  THOR_BRANCH_EDGE_IMAGE: $CI_REGISTRY_IMAGE/edge:$CI_COMMIT_REF_NAME
+  THOR_BRANCH_EDGE_LAB4_IMAGE: $LAB4_HARBOR_REGISTRY/group-medical/harmonia/tmi-thor/fed-learning-edge:$CI_COMMIT_REF_NAME
+  THOR_FL_AGG_DOCKERFILE: dockerfile/Dockerfile.fl.agg
+  THOR_FL_EDGE_DOCKERFILE: dockerfile/Dockerfile.fl.edge
+
+services:
+  - docker:dind
+
+stages:
+  - test
+  - build
+  - push
+
+flake8:
+  stage: test
+  image: python:3.7-slim
+  script:
+    - pip install flake8
+    - flake8
+
+build-master:
+  stage: build
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_MASTER_IMAGE || true
+    - docker build --cache-from $THOR_MASTER_IMAGE -t $THOR_MASTER_IMAGE -f $THOR_DOCKERFILE .
+    - docker push $THOR_MASTER_IMAGE
+  only:
+    - master
+
+build-tag:
+  stage: build
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_RELEASE_IMAGE || true
+    - docker build --cache-from $THOR_RELEASE_IMAGE -t $THOR_RELEASE_IMAGE -f $THOR_DOCKERFILE .
+    - docker push $THOR_RELEASE_IMAGE
+  only:
+    - tags
+
+build-merge-request:
+  stage: build
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_BRANCH_IMAGE || true
+    - docker build --cache-from $THOR_BRANCH_IMAGE -t $THOR_BRANCH_IMAGE -f $THOR_DOCKERFILE .
+    - docker push $THOR_BRANCH_IMAGE
+  when: manual
+  only:
+    - merge_requests
+  except:
+    - master
+    - tags
+
+build-harmonia-aggregator-master:
+  stage: build
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_MASTER_AGGREGATOR_IMAGE || true
+    - docker build --cache-from $THOR_MASTER_AGGREGATOR_IMAGE -t $THOR_MASTER_AGGREGATOR_IMAGE -f $THOR_FL_AGG_DOCKERFILE .
+    - docker push $THOR_MASTER_AGGREGATOR_IMAGE
+  only:
+    - master
+
+push-harmonia-aggregator-master:
+  stage: push
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_MASTER_AGGREGATOR_IMAGE
+    - docker login -u robot'$'$HARBOR_REGISTRY_USER -p $HARBOR_REGISTRY_PASSWORD $LAB4_HARBOR_REGISTRY
+    - docker tag $THOR_MASTER_AGGREGATOR_IMAGE $THOR_MASTER_AGGREGATOR_LAB4_IMAGE
+    - docker push $THOR_MASTER_AGGREGATOR_LAB4_IMAGE
+  only:
+    - master
+
+build-harmonia-edge-master:
+  stage: build
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_MASTER_EDGE_IMAGE || true
+    - docker build --cache-from $THOR_MASTER_EDGE_IMAGE -t $THOR_MASTER_EDGE_IMAGE -f $THOR_FL_EDGE_DOCKERFILE .
+    - docker push $THOR_MASTER_EDGE_IMAGE
+  only:
+    - master
+
+push-harmonia-edge-master:
+  stage: push
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_MASTER_EDGE_IMAGE
+    - docker login -u robot'$'$HARBOR_REGISTRY_USER -p $HARBOR_REGISTRY_PASSWORD $LAB4_HARBOR_REGISTRY
+    - docker tag $THOR_MASTER_EDGE_IMAGE $THOR_MASTER_EDGE_LAB4_IMAGE
+    - docker push $THOR_MASTER_EDGE_LAB4_IMAGE
+  only:
+    - master
+
+build-harmonia-aggregator-tag:
+  stage: build
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_RELEASE_AGGREGATOR_IMAGE || true
+    - docker build --cache-from $THOR_RELEASE_AGGREGATOR_IMAGE -t $THOR_RELEASE_AGGREGATOR_IMAGE -f $THOR_FL_AGG_DOCKERFILE .
+    - docker push $THOR_RELEASE_AGGREGATOR_IMAGE
+  only:
+    - tags
+
+push-harmonia-aggregator-tag:
+  stage: push
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_RELEASE_AGGREGATOR_IMAGE
+    - docker login -u robot'$'$HARBOR_REGISTRY_USER -p $HARBOR_REGISTRY_PASSWORD $LAB4_HARBOR_REGISTRY
+    - docker tag $THOR_RELEASE_AGGREGATOR_IMAGE $THOR_RELEASE_AGGREGATOR_LAB4_IMAGE
+    - docker push $THOR_RELEASE_AGGREGATOR_LAB4_IMAGE
+  only:
+    - tags
+
+build-harmonia-edge-tag:
+  stage: build
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_RELEASE_EDGE_IMAGE || true
+    - docker build --cache-from $THOR_RELEASE_EDGE_IMAGE -t $THOR_RELEASE_EDGE_IMAGE -f $THOR_FL_EDGE_DOCKERFILE .
+    - docker push $THOR_RELEASE_EDGE_IMAGE
+  only:
+    - tags
+
+push-harmonia-edge-tag:
+  stage: push
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_RELEASE_EDGE_IMAGE
+    - docker login -u robot'$'$HARBOR_REGISTRY_USER -p $HARBOR_REGISTRY_PASSWORD $LAB4_HARBOR_REGISTRY
+    - docker tag $THOR_RELEASE_EDGE_IMAGE $THOR_RELEASE_EDGE_LAB4_IMAGE
+    - docker push $THOR_RELEASE_EDGE_LAB4_IMAGE
+  only:
+    - tags
+
+build-harmonia-aggregator-merge-request:
+  stage: build
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_BRANCH_AGGREGATOR_IMAGE || true
+    - docker build --cache-from $THOR_BRANCH_AGGREGATOR_IMAGE -t $THOR_BRANCH_AGGREGATOR_IMAGE -f $THOR_FL_AGG_DOCKERFILE .
+    - docker push $THOR_BRANCH_AGGREGATOR_IMAGE
+  when: manual
+  only:
+    - merge_requests
+  except:
+    - master
+    - tags
+
+push-harmonia-aggregator-merge-request:
+  stage: push
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_BRANCH_AGGREGATOR_IMAGE
+    - docker login -u robot'$'$HARBOR_REGISTRY_USER -p $HARBOR_REGISTRY_PASSWORD $LAB4_HARBOR_REGISTRY
+    - docker tag $THOR_BRANCH_AGGREGATOR_IMAGE $THOR_BRANCH_AGGREGATOR_LAB4_IMAGE
+    - docker push $THOR_BRANCH_AGGREGATOR_LAB4_IMAGE
+  when: manual
+  only:
+    - merge_requests
+  except:
+    - master
+    - tags
+
+build-harmonia-edge-merge-request:
+  stage: build
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_BRANCH_EDGE_IMAGE || true
+    - docker build --cache-from $THOR_BRANCH_EDGE_IMAGE -t $THOR_BRANCH_EDGE_IMAGE -f $THOR_FL_EDGE_DOCKERFILE .
+    - docker push $THOR_BRANCH_EDGE_IMAGE
+  when: manual
+  only:
+    - merge_requests
+  except:
+    - master
+    - tags
+
+push-harmonia-edge-merge-request:
+  stage: push
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $THOR_BRANCH_EDGE_IMAGE
+    - docker login -u robot'$'$HARBOR_REGISTRY_USER -p $HARBOR_REGISTRY_PASSWORD $LAB4_HARBOR_REGISTRY
+    - docker tag $THOR_BRANCH_EDGE_IMAGE $THOR_BRANCH_EDGE_LAB4_IMAGE
+    - docker push $THOR_BRANCH_EDGE_LAB4_IMAGE
+  when: manual
+  only:
+    - merge_requests
+  except:
+    - master
+    - tags

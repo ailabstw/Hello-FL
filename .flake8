@@ -1,0 +1,23 @@
+[flake8]
+
+ignore = W, E501
+extend-ignore = E203
+per-file-ignores = **/__init__.py:F401, **/builder.py:F401, F841, thor/data/dataset.py:F401
+max-line-length = 100
+
+## File
+
+exclude = thor/metrics/LunaFrocScript/, build/, dist/, thor/models/dummy_seg_2stage_model_test.py, *.ipynb_checkpoints*
+filename = *.py
+
+## Format
+
+# Select the formatter used to display errors to the user.
+format = default
+
+# Print the total number of errors.
+count = True
+# Print the source code generating the error/warning in question.
+show-source = True
+# Count the number of occurrences of each error/warning code and print a report.
+statistics = True
