@@ -133,7 +133,7 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
     # ------------------------
     logQueue.put({"level":"info", "message":"Initialization :Check if pretrained weight exist."})
     if hasPretrainedWeight is not None:
-        model.load_state_dict(torch.load(namespace.pretrained_path)["state_dict"])
+        model.load_state_dict(torch.load(namespace.pretrainedModelPath)["state_dict"])
         logQueue.put({"level":"info", "message":"Initialization :Pretrained weight loaded."})
     logQueue.put({"level":"info", "message":"Initialization :Pretrained weight not found."})
     # ------------------------

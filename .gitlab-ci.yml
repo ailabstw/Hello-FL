@@ -1,16 +1,11 @@
 variables:
-  THOR_MASTER_IMAGE: $CI_REGISTRY_IMAGE:master
-  THOR_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
-  THOR_BRANCH_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
-  THOR_DOCKERFILE: dockerfile/Dockerfile.thor
-
-  THOR_MASTER_EDGE_IMAGE: $CI_REGISTRY_IMAGE/edge:master
-  THOR_MASTER_EDGE_LAB4_IMAGE: $LAB4_HARBOR_REGISTRY/group-medical/harmonia/tmi-thor/fed-learning-edge:master
-  THOR_RELEASE_EDGE_IMAGE: $CI_REGISTRY_IMAGE/edge:$CI_COMMIT_TAG
-  THOR_RELEASE_EDGE_LAB4_IMAGE: $LAB4_HARBOR_REGISTRY/group-medical/harmonia/tmi-thor/fed-learning-edge:$CI_COMMIT_TAG
-  THOR_BRANCH_EDGE_IMAGE: $CI_REGISTRY_IMAGE/edge:$CI_COMMIT_REF_NAME
-  THOR_BRANCH_EDGE_LAB4_IMAGE: $LAB4_HARBOR_REGISTRY/group-medical/harmonia/tmi-thor/fed-learning-edge:$CI_COMMIT_REF_NAME
-  THOR_FL_EDGE_DOCKERFILE: dockerfile/Dockerfile.fl.edge
+  MASTER_EDGE_IMAGE: $CI_REGISTRY_IMAGE/edge:master
+  MASTER_EDGE_LAB4_IMAGE: $LAB4_HARBOR_REGISTRY/group-medical/harmonia/tmi-thor/fed-learning-edge:master
+  RELEASE_EDGE_IMAGE: $CI_REGISTRY_IMAGE/edge:$CI_COMMIT_TAG
+  RELEASE_EDGE_LAB4_IMAGE: $LAB4_HARBOR_REGISTRY/group-medical/harmonia/tmi-thor/fed-learning-edge:$CI_COMMIT_TAG
+  BRANCH_EDGE_IMAGE: $CI_REGISTRY_IMAGE/edge:$CI_COMMIT_REF_NAME
+  BRANCH_EDGE_LAB4_IMAGE: $LAB4_HARBOR_REGISTRY/group-medical/harmonia/tmi-thor/fed-learning-edge:$CI_COMMIT_REF_NAME
+  FL_EDGE_DOCKERFILE: dockerfile/Dockerfile.fl.edge
 
 services:
   - docker:dind
@@ -28,31 +23,15 @@ flake8:
     - flake8
   when: manual
 
-build-merge-request:
-  stage: build
-  image: docker:latest
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-  script:
-    - docker pull $THOR_BRANCH_IMAGE || true
-    - docker build --cache-from $THOR_BRANCH_IMAGE -t $THOR_BRANCH_IMAGE -f $THOR_DOCKERFILE .
-    - docker push $THOR_BRANCH_IMAGE
-  when: manual
-  only:
-    - merge_requests
-  except:
-    - master
-    - tags
-
 build-harmonia-edge-master:
   stage: build
   image: docker:latest
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - docker pull $THOR_MASTER_EDGE_IMAGE || true
-    - docker build --cache-from $THOR_MASTER_EDGE_IMAGE -t $THOR_MASTER_EDGE_IMAGE -f $THOR_FL_EDGE_DOCKERFILE .
-    - docker push $THOR_MASTER_EDGE_IMAGE
+    - docker pull $MASTER_EDGE_IMAGE || true
+    - docker build --cache-from $MASTER_EDGE_IMAGE -t $MASTER_EDGE_IMAGE -f $FL_EDGE_DOCKERFILE .
+    - docker push $MASTER_EDGE_IMAGE
   only:
     - master
 
@@ -62,10 +41,10 @@ push-harmonia-edge-master:
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - docker pull $THOR_MASTER_EDGE_IMAGE
+    - docker pull $MASTER_EDGE_IMAGE
     - docker login -u robot'$'$HARBOR_REGISTRY_USER -p $HARBOR_REGISTRY_PASSWORD $LAB4_HARBOR_REGISTRY
-    - docker tag $THOR_MASTER_EDGE_IMAGE $THOR_MASTER_EDGE_LAB4_IMAGE
-    - docker push $THOR_MASTER_EDGE_LAB4_IMAGE
+    - docker tag $MASTER_EDGE_IMAGE $MASTER_EDGE_LAB4_IMAGE
+    - docker push $MASTER_EDGE_LAB4_IMAGE
   only:
     - master
 
@@ -76,9 +55,9 @@ build-harmonia-edge-tag:
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - docker pull $THOR_RELEASE_EDGE_IMAGE || true
-    - docker build --cache-from $THOR_RELEASE_EDGE_IMAGE -t $THOR_RELEASE_EDGE_IMAGE -f $THOR_FL_EDGE_DOCKERFILE .
-    - docker push $THOR_RELEASE_EDGE_IMAGE
+    - docker pull $RELEASE_EDGE_IMAGE || true
+    - docker build --cache-from $RELEASE_EDGE_IMAGE -t $RELEASE_EDGE_IMAGE -f $FL_EDGE_DOCKERFILE .
+    - docker push $RELEASE_EDGE_IMAGE
   only:
     - tags
 
@@ -88,10 +67,10 @@ push-harmonia-edge-tag:
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - docker pull $THOR_RELEASE_EDGE_IMAGE
+    - docker pull $RELEASE_EDGE_IMAGE
     - docker login -u robot'$'$HARBOR_REGISTRY_USER -p $HARBOR_REGISTRY_PASSWORD $LAB4_HARBOR_REGISTRY
-    - docker tag $THOR_RELEASE_EDGE_IMAGE $THOR_RELEASE_EDGE_LAB4_IMAGE
-    - docker push $THOR_RELEASE_EDGE_LAB4_IMAGE
+    - docker tag $RELEASE_EDGE_IMAGE $RELEASE_EDGE_LAB4_IMAGE
+    - docker push $RELEASE_EDGE_LAB4_IMAGE
   only:
     - tags
 
@@ -102,9 +81,9 @@ build-harmonia-edge-merge-request:
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - docker pull $THOR_BRANCH_EDGE_IMAGE || true
-    - docker build --cache-from $THOR_BRANCH_EDGE_IMAGE -t $THOR_BRANCH_EDGE_IMAGE -f $THOR_FL_EDGE_DOCKERFILE .
-    - docker push $THOR_BRANCH_EDGE_IMAGE
+    - docker pull $BRANCH_EDGE_IMAGE || true
+    - docker build --cache-from $BRANCH_EDGE_IMAGE -t $BRANCH_EDGE_IMAGE -f $FL_EDGE_DOCKERFILE .
+    - docker push $BRANCH_EDGE_IMAGE
   when: manual
   only:
     - merge_requests
@@ -118,10 +97,10 @@ push-harmonia-edge-merge-request:
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - docker pull $THOR_BRANCH_EDGE_IMAGE
+    - docker pull $BRANCH_EDGE_IMAGE
     - docker login -u robot'$'$HARBOR_REGISTRY_USER -p $HARBOR_REGISTRY_PASSWORD $LAB4_HARBOR_REGISTRY
-    - docker tag $THOR_BRANCH_EDGE_IMAGE $THOR_BRANCH_EDGE_LAB4_IMAGE
-    - docker push $THOR_BRANCH_EDGE_LAB4_IMAGE
+    - docker tag $BRANCH_EDGE_IMAGE $BRANCH_EDGE_LAB4_IMAGE
+    - docker push $BRANCH_EDGE_LAB4_IMAGE
   when: manual
   only:
     - merge_requests

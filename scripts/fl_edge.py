@@ -50,14 +50,9 @@ def logEventLoop(logQueue):
 
 def train_model(yml_path, namespace, trainStartedEvent, trainFinishedEvent, base_model, local_model_dir, epochCount):
 
-    logging.info(f"base model path: [{base_model.path}]")
-    logging.info(f"local model path: [{local_model_dir}]")
+    logging.info(f"pretrained (global) model path: [{namespace.pretrainedModelPath}]")
+    logging.info(f"local model path: [{namespace.localModelPath}]")
     logging.info(f"epoch count: [{epochCount}]")
-
-    local_model_path = os.path.join("/repos", local_model_dir, "weights.ckpt")
-    base_model_path = os.path.join("/repos", base_model.path, "merged.ckpt")
-
-    namespace.pretrained_path = base_model_path
 
     logging.info("trainer has been called to start training.")
     trainStartedEvent.set()
@@ -68,7 +63,7 @@ def train_model(yml_path, namespace, trainStartedEvent, trainFinishedEvent, base
     trainFinishedEvent.clear()
 
     logging.info(f"model last epoch path: [{namespace.epoch_path}]")
-    shutil.copyfile(namespace.epoch_path, local_model_path)
+    shutil.copyfile(namespace.epoch_path, namespace.localModelPath)
 
     logging.info(f"model datasetSize: {namespace.dataset_size}")
     logging.info(f"model metrics: {namespace.metrics}")
@@ -99,6 +94,9 @@ def train_model(yml_path, namespace, trainStartedEvent, trainFinishedEvent, base
 class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
     def TrainInit(self, request, context):
         logging.info("TrainInit, reset the current epoch, increase the version")
+        namespace.localModelPath = os.environ['LOCAL_MODEL_PATH']
+        namespace.pretrainedModelPath = os.environ['GLOBAL_MODEL_PATH']
+
         global trainingProcess
         global trainStartedEvent
         global trainFinishedEvent
