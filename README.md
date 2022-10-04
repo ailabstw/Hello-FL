@@ -1,92 +1,56 @@
 # Hello FL
 
-this is first version of FL
+Easiest way for ML people to learn FL framework. Because it is the simply integration of Ailabs FL framework and the well know Mnist.
 
 ## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Hello FL consist of three mainly parts: `operator` and `fl_edge.py` and `fl_train.py`.
+But one who wants to fit there model into Ailabs framework only need to replace `fl_train.py` with their training script.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+* Operator : is the one communicate with our edge and the centrol aggregator. 
+While it works, it will follow the `lifecycle of FL` (will be introduced later）to call `the four GRPC API` within fl_edge.py. 
+The **lifecycle of FL** and `the four GRPC API` will be introduced later.
 
-## Add your files
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+* fl_edge.py : is the example of grpc handler for Ailabs FL framework. It handles all the grpc calls while doing FL training.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.corp.ailabs.tw/federated-learning/hello-fl.git
-git branch -M main
-git push -uf origin main
-```
+* fl_train.py : is mainly consist of `Mnist` training code. Some changes need to be implemented in fl_train.py to fit Ailabs FL framework. We will introduce this later.
 
-## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.corp.ailabs.tw/federated-learning/hello-fl/-/settings/integrations)
+## The four GRPC API
 
-## Collaborate with your team
+In the last section, we have said that hello FL consist of 3 parts : `Operator`, `fl_edge.py` and `fl_train.py`. Grpc implementation have been done in `Operator` and `fl_edge.py` by Ailabs. So one who wants to integrate their model into Ailabs FL framwork no need to implement `The four GRPC API` theirself . But one need to know how it works, then they will how to operatate within the  `fl_train.py`.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+* TrainInit : When a FL get started, `Operator` will call the TrainInit （GRPC）in `fl_edge.py`, which directly means make the train initialized. Users need to initialize their training after this call have been trigger. `fl_edge.py` helps to handle this event, and will call the `init` in `fl_train.py` （which will be replace with one's script）. So if user need to implement `init` in their `fl_train.py` and do initiation in this function. After user have done the initialization in `init`, should do trainInitDoneEvent.set() to infer `fl_edge.py` that initialization have done and `fl_edge.py` will help to reply `Operator` that initialization have done and go to next section : LocalTrain.
 
-## Test and Deploy
+* LocalTrain : After user send trainInitDoneEvent.set(), `Operator` will later call LocalTrain in `fl_edge.py`. LocalTrain means to trigger one epoch of training. `fl_edge.py` have help to handle this GPPC and will do `trainStartedEvent.set()` event to `fl_train.py`, and user need to handle this event in `fl_train.py` to lauch a new epoch of training.And after the new epoch of training have done, do `trainFinishedEvent.set()` to inform `fl_edge.py` that this new epoch of training have done.
 
-Use the built-in continuous integration in GitLab.
+One will do `trainStartedEvent.wait()` in the begining of their training loop and reply with  `trainStartedEvent.clear()`.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
 
-***
+* TrainInterrupt : This GPPC has not be implemented currently.
 
-# Editing this README
+* TrainFinish : This GRPC will be call after FL training has done. And `fl_edge.py` has help to close the training process.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## MSC of Ailabs FL framework
 
-## Name
-Choose a self-explaining name for your project.
+* TrainInit Fhase
+![image](uploads/24a488d7ba78a5abbeba054447667eff/image.png)
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+* LocalTrain Fhase
+![image](uploads/97545714b82ce65f1729680518a09702/image.png)
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## FL Logging system in Ailabs FL framework
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+## The most important things while replace fl_train.py ?
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+* Must to be done in fl_train.py.
+  * Do `trainInitDoneEvent.set()` after initialization has done. To inform that your training initialization has done （before entering training loop）
+  * Do `trainStartedEvent.wait()` and `trainStartedEvent.clear()` in the begining of training loop. To blocking the new epoch of training until it recevie trainStartedEvent event.
+  * Do `trainFinishedEvent.set()` in the end of training loop to inforn that your one epoch of training has done. 
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+* Good to have
+  * using `FL Logging system` to log some customized message whihe in FL triaing will help to realize more when bugs or training problem has occured.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
