@@ -83,7 +83,7 @@ logQueue.put(PackageLogMsg(LogLevel.INFO,'Training :trained finished. Start savi
 
 * First, that's see another version msc of this situation. We will not have fl_edge.py. Instead, all GRPC function calls have been handled by fl_edge.py will now handled by 3rd it self.
 
-<div align="left"><img src="./assets/3rd_without_python.png" style="width:25%"></img></div>
+<div align="left"><img src="./assets/3rd_without_python.png" style="width:100%"></img></div>
 
 * Must to be know to replace fl_edge.py
     * Should at least have a thread （process）[called GRPC handler] handles 3 GRPC funcaiton calls.
