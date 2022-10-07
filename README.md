@@ -36,21 +36,21 @@ In the last section, we have introduced the 3 parts of Ailabs FL framework : `Op
 ## Lifecycle of Ailabs FL framework
 
 ```plaintext
-  TrainInit: In the begining of Ailabs FL training, we will enter a phase called TrainInit. 
+  TrainInit: In the begining of Ailabs FL training, we will enter a phase called TrainInit.
   This is also the GRPC call name from Operator. We will do initialization at this phase
   like preprocessing and load pretrained model weight. Also any other things needed to be
-  done before training can be done at this phase. 
+  done before training can be done at this phase.
 
   In this phase, our training communicate outside with 1 event : trainInitDoneEvent.
 ```
 <div align="center"><img src="./assets/msc_1.png" style="width:75%"></img></div>
 
 ```plaintext
-  LocalTrain: In the second phase of Ailabs FL training, we enter a phase called LocalTrain. 
+  LocalTrain: In the second phase of Ailabs FL training, we enter a phase called LocalTrain.
   This is also the GRPC call name from Operator. This phase will loop 250-1000 times or
   even more. Every LocalTrain phase means an epoch of FL training. How many LocalTrain
-  phases we run throug depends on how many epochs(rounds) a FL project set. 
-  
+  phases we run throug depends on how many epochs(rounds) a FL project set.
+
   In this phase, our training communicate outside with python event system, there are 2 events in this phase: trainStartedEvent and trainFinishedEvent.
 ```
 
@@ -78,3 +78,19 @@ logQueue.put(PackageLogMsg(LogLevel.INFO,'Training :trained finished. Start savi
 * Good to have
   * using `FL Logging system` to log some customized message whihe in FL triaing will help to realize more when bugs or training problem has occured.
 
+
+## 3rd that not using Python base, how to do ?
+
+* First, that's see another version msc of this situation. We will not have fl_edge.py. Instead, all GRPC function calls have been handled by fl_edge.py will now handled by 3rd it self.
+
+<div align="left"><img src="./assets/3rd_without_python.png" style="width:25%"></img></div>
+
+* Must to be know to replace fl_edge.py
+    * Should at least have a thread （process）[called GRPC handler] handles 3 GRPC funcaiton calls.
+    * GRPC handler should be independent, not be in same thread/process of training process.
+    * GRPC handler can lauch training thread/process after receiving TrainInit GRPC call.
+    * Training thread/process will do N epochs training.
+    * Training thread/process will wait（blocking）in the begining of every epoch, wait until GRPC handler receiving LocalTrain GRPC call, and start this epoch of training then finish.
+    * At the end of every epoch, Training thread/process will call LocallTrainFinish via GRPC handler.
+    * GRPC handler received TrainFinsh GRPC call will end all threads/processes.
+    * GRPC handler should also implement logs interface and let Training thread/process send logs.
