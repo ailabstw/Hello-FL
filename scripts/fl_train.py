@@ -169,7 +169,7 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
             # print("pretrained state_dict :", weight["state_dict"].keys())
 
             # 4-2:Load pretrained weight from global model
-            model.load_state_dict(torch.load(namespace.pretrained_path)["state_dict"])
+            model.load_state_dict(torch.load(namespace.pretrainedModelPath)["state_dict"])
 
         # ------------------------
         # 5.Local training started: Start this epoch of training and validaiton.
