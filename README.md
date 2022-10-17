@@ -11,7 +11,7 @@ One who wants to fit their 3rd party model into Ailabs framework only need to re
 
 * **Operator** : is the one communicate with our edge and the centrol aggregator.
 While it works, it will follow the `lifecycle of FL` to call `the four GRPC API` within fl_edge.py.
-The `lifecycle of FL` and `the four GRPC API` will be introduced later.
+The `lifecycle of FL` and `the four GRPC API` will be introduced later..
 
 
 * **fl_edge.py** : is the example of grpc handler for Ailabs FL framework. It handles all the grpc calls while doing FL training. This script is provided by Ailabs if 3rd party model training code is python base. We provide this script to help handling the FL GRPC call.
