@@ -80,8 +80,6 @@ def train_model(yml_path, namespace, trainStartedEvent, trainFinishedEvent, base
         response = stub.LocalTrainFinish(result, timeout=30)
         logging.info("stub.LocalTrainFinish Done.")
         logging.info(f"namespace: {namespace}")
-        namespace = {}
-        logging.info(f"clean namespace: {namespace}")
         logging.debug(f"sending grpc message succeeds, response: {response}")
         channel.close()
         logging.info("channel.close() Done.")
