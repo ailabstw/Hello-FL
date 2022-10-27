@@ -4,7 +4,6 @@ import grpc
 
 from grpcpb import service_pb2 as service__pb2
 
-
 class EdgeOperatorStub(object):
     """Missing associated documentation comment in .proto file."""
 
@@ -15,15 +14,15 @@ class EdgeOperatorStub(object):
             channel: A grpc.Channel.
         """
         self.LocalTrainFinish = channel.unary_unary(
-            '/protos.EdgeOperator/LocalTrainFinish',
-            request_serializer=service__pb2.LocalTrainResult.SerializeToString,
-            response_deserializer=service__pb2.Empty.FromString,
-        )
+                '/protos.EdgeOperator/LocalTrainFinish',
+                request_serializer=service__pb2.LocalTrainResult.SerializeToString,
+                response_deserializer=service__pb2.Empty.FromString,
+                )
         self.LogMessage = channel.unary_unary(
-            '/protos.EdgeOperator/LogMessage',
-            request_serializer=service__pb2.Log.SerializeToString,
-            response_deserializer=service__pb2.Empty.FromString,
-        )
+                '/protos.EdgeOperator/LogMessage',
+                request_serializer=service__pb2.Log.SerializeToString,
+                response_deserializer=service__pb2.Empty.FromString,
+                )
 
 
 class EdgeOperatorServicer(object):
@@ -44,60 +43,59 @@ class EdgeOperatorServicer(object):
 
 def add_EdgeOperatorServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        'LocalTrainFinish': grpc.unary_unary_rpc_method_handler(
-            servicer.LocalTrainFinish,
-            request_deserializer=service__pb2.LocalTrainResult.FromString,
-            response_serializer=service__pb2.Empty.SerializeToString,
-        ),
-        'LogMessage': grpc.unary_unary_rpc_method_handler(
-            servicer.LogMessage,
-            request_deserializer=service__pb2.Log.FromString,
-            response_serializer=service__pb2.Empty.SerializeToString,
-        ),
+            'LocalTrainFinish': grpc.unary_unary_rpc_method_handler(
+                    servicer.LocalTrainFinish,
+                    request_deserializer=service__pb2.LocalTrainResult.FromString,
+                    response_serializer=service__pb2.Empty.SerializeToString,
+            ),
+            'LogMessage': grpc.unary_unary_rpc_method_handler(
+                    servicer.LogMessage,
+                    request_deserializer=service__pb2.Log.FromString,
+                    response_serializer=service__pb2.Empty.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'protos.EdgeOperator', rpc_method_handlers)
+            'protos.EdgeOperator', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
+
  # This class is part of an EXPERIMENTAL API.
-
-
 class EdgeOperator(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
     def LocalTrainFinish(request,
-                         target,
-                         options=(),
-                         channel_credentials=None,
-                         call_credentials=None,
-                         insecure=False,
-                         compression=None,
-                         wait_for_ready=None,
-                         timeout=None,
-                         metadata=None):
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
         return grpc.experimental.unary_unary(request, target, '/protos.EdgeOperator/LocalTrainFinish',
-                                             service__pb2.LocalTrainResult.SerializeToString,
-                                             service__pb2.Empty.FromString,
-                                             options, channel_credentials,
-                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            service__pb2.LocalTrainResult.SerializeToString,
+            service__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def LogMessage(request,
-                   target,
-                   options=(),
-                   channel_credentials=None,
-                   call_credentials=None,
-                   insecure=False,
-                   compression=None,
-                   wait_for_ready=None,
-                   timeout=None,
-                   metadata=None):
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
         return grpc.experimental.unary_unary(request, target, '/protos.EdgeOperator/LogMessage',
-                                             service__pb2.Log.SerializeToString,
-                                             service__pb2.Empty.FromString,
-                                             options, channel_credentials,
-                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            service__pb2.Log.SerializeToString,
+            service__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
 
 class EdgeAppStub(object):
@@ -109,30 +107,41 @@ class EdgeAppStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.IsDataValidated = channel.unary_unary(
+                '/protos.EdgeApp/IsDataValidated',
+                request_serializer=service__pb2.Empty.SerializeToString,
+                response_deserializer=service__pb2.Empty.FromString,
+                )
         self.LocalTrain = channel.unary_unary(
-            '/protos.EdgeApp/LocalTrain',
-            request_serializer=service__pb2.LocalTrainParams.SerializeToString,
-            response_deserializer=service__pb2.Empty.FromString,
-        )
+                '/protos.EdgeApp/LocalTrain',
+                request_serializer=service__pb2.LocalTrainParams.SerializeToString,
+                response_deserializer=service__pb2.Empty.FromString,
+                )
         self.TrainInit = channel.unary_unary(
-            '/protos.EdgeApp/TrainInit',
-            request_serializer=service__pb2.Empty.SerializeToString,
-            response_deserializer=service__pb2.Empty.FromString,
-        )
+                '/protos.EdgeApp/TrainInit',
+                request_serializer=service__pb2.Empty.SerializeToString,
+                response_deserializer=service__pb2.Empty.FromString,
+                )
         self.TrainInterrupt = channel.unary_unary(
-            '/protos.EdgeApp/TrainInterrupt',
-            request_serializer=service__pb2.Empty.SerializeToString,
-            response_deserializer=service__pb2.Empty.FromString,
-        )
+                '/protos.EdgeApp/TrainInterrupt',
+                request_serializer=service__pb2.Empty.SerializeToString,
+                response_deserializer=service__pb2.Empty.FromString,
+                )
         self.TrainFinish = channel.unary_unary(
-            '/protos.EdgeApp/TrainFinish',
-            request_serializer=service__pb2.Empty.SerializeToString,
-            response_deserializer=service__pb2.Empty.FromString,
-        )
+                '/protos.EdgeApp/TrainFinish',
+                request_serializer=service__pb2.Empty.SerializeToString,
+                response_deserializer=service__pb2.Empty.FromString,
+                )
 
 
 class EdgeAppServicer(object):
     """Missing associated documentation comment in .proto file."""
+
+    def IsDataValidated(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def LocalTrain(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -161,104 +170,125 @@ class EdgeAppServicer(object):
 
 def add_EdgeAppServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        'LocalTrain': grpc.unary_unary_rpc_method_handler(
-            servicer.LocalTrain,
-            request_deserializer=service__pb2.LocalTrainParams.FromString,
-            response_serializer=service__pb2.Empty.SerializeToString,
-        ),
-        'TrainInit': grpc.unary_unary_rpc_method_handler(
-            servicer.TrainInit,
-            request_deserializer=service__pb2.Empty.FromString,
-            response_serializer=service__pb2.Empty.SerializeToString,
-        ),
-        'TrainInterrupt': grpc.unary_unary_rpc_method_handler(
-            servicer.TrainInterrupt,
-            request_deserializer=service__pb2.Empty.FromString,
-            response_serializer=service__pb2.Empty.SerializeToString,
-        ),
-        'TrainFinish': grpc.unary_unary_rpc_method_handler(
-            servicer.TrainFinish,
-            request_deserializer=service__pb2.Empty.FromString,
-            response_serializer=service__pb2.Empty.SerializeToString,
-        ),
+            'IsDataValidated': grpc.unary_unary_rpc_method_handler(
+                    servicer.IsDataValidated,
+                    request_deserializer=service__pb2.Empty.FromString,
+                    response_serializer=service__pb2.Empty.SerializeToString,
+            ),
+            'LocalTrain': grpc.unary_unary_rpc_method_handler(
+                    servicer.LocalTrain,
+                    request_deserializer=service__pb2.LocalTrainParams.FromString,
+                    response_serializer=service__pb2.Empty.SerializeToString,
+            ),
+            'TrainInit': grpc.unary_unary_rpc_method_handler(
+                    servicer.TrainInit,
+                    request_deserializer=service__pb2.Empty.FromString,
+                    response_serializer=service__pb2.Empty.SerializeToString,
+            ),
+            'TrainInterrupt': grpc.unary_unary_rpc_method_handler(
+                    servicer.TrainInterrupt,
+                    request_deserializer=service__pb2.Empty.FromString,
+                    response_serializer=service__pb2.Empty.SerializeToString,
+            ),
+            'TrainFinish': grpc.unary_unary_rpc_method_handler(
+                    servicer.TrainFinish,
+                    request_deserializer=service__pb2.Empty.FromString,
+                    response_serializer=service__pb2.Empty.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'protos.EdgeApp', rpc_method_handlers)
+            'protos.EdgeApp', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
+
  # This class is part of an EXPERIMENTAL API.
-
-
 class EdgeApp(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
+    def IsDataValidated(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/protos.EdgeApp/IsDataValidated',
+            service__pb2.Empty.SerializeToString,
+            service__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def LocalTrain(request,
-                   target,
-                   options=(),
-                   channel_credentials=None,
-                   call_credentials=None,
-                   insecure=False,
-                   compression=None,
-                   wait_for_ready=None,
-                   timeout=None,
-                   metadata=None):
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
         return grpc.experimental.unary_unary(request, target, '/protos.EdgeApp/LocalTrain',
-                                             service__pb2.LocalTrainParams.SerializeToString,
-                                             service__pb2.Empty.FromString,
-                                             options, channel_credentials,
-                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            service__pb2.LocalTrainParams.SerializeToString,
+            service__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def TrainInit(request,
-                  target,
-                  options=(),
-                  channel_credentials=None,
-                  call_credentials=None,
-                  insecure=False,
-                  compression=None,
-                  wait_for_ready=None,
-                  timeout=None,
-                  metadata=None):
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
         return grpc.experimental.unary_unary(request, target, '/protos.EdgeApp/TrainInit',
-                                             service__pb2.Empty.SerializeToString,
-                                             service__pb2.Empty.FromString,
-                                             options, channel_credentials,
-                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            service__pb2.Empty.SerializeToString,
+            service__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def TrainInterrupt(request,
-                       target,
-                       options=(),
-                       channel_credentials=None,
-                       call_credentials=None,
-                       insecure=False,
-                       compression=None,
-                       wait_for_ready=None,
-                       timeout=None,
-                       metadata=None):
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
         return grpc.experimental.unary_unary(request, target, '/protos.EdgeApp/TrainInterrupt',
-                                             service__pb2.Empty.SerializeToString,
-                                             service__pb2.Empty.FromString,
-                                             options, channel_credentials,
-                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            service__pb2.Empty.SerializeToString,
+            service__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def TrainFinish(request,
-                    target,
-                    options=(),
-                    channel_credentials=None,
-                    call_credentials=None,
-                    insecure=False,
-                    compression=None,
-                    wait_for_ready=None,
-                    timeout=None,
-                    metadata=None):
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
         return grpc.experimental.unary_unary(request, target, '/protos.EdgeApp/TrainFinish',
-                                             service__pb2.Empty.SerializeToString,
-                                             service__pb2.Empty.FromString,
-                                             options, channel_credentials,
-                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            service__pb2.Empty.SerializeToString,
+            service__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
 
 class AggregateServerOperatorStub(object):
@@ -271,10 +301,10 @@ class AggregateServerOperatorStub(object):
             channel: A grpc.Channel.
         """
         self.AggregateFinish = channel.unary_unary(
-            '/protos.AggregateServerOperator/AggregateFinish',
-            request_serializer=service__pb2.AggregateResult.SerializeToString,
-            response_deserializer=service__pb2.Empty.FromString,
-        )
+                '/protos.AggregateServerOperator/AggregateFinish',
+                request_serializer=service__pb2.AggregateResult.SerializeToString,
+                response_deserializer=service__pb2.Empty.FromString,
+                )
 
 
 class AggregateServerOperatorServicer(object):
@@ -289,38 +319,37 @@ class AggregateServerOperatorServicer(object):
 
 def add_AggregateServerOperatorServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        'AggregateFinish': grpc.unary_unary_rpc_method_handler(
-            servicer.AggregateFinish,
-            request_deserializer=service__pb2.AggregateResult.FromString,
-            response_serializer=service__pb2.Empty.SerializeToString,
-        ),
+            'AggregateFinish': grpc.unary_unary_rpc_method_handler(
+                    servicer.AggregateFinish,
+                    request_deserializer=service__pb2.AggregateResult.FromString,
+                    response_serializer=service__pb2.Empty.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'protos.AggregateServerOperator', rpc_method_handlers)
+            'protos.AggregateServerOperator', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
+
  # This class is part of an EXPERIMENTAL API.
-
-
 class AggregateServerOperator(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
     def AggregateFinish(request,
-                        target,
-                        options=(),
-                        channel_credentials=None,
-                        call_credentials=None,
-                        insecure=False,
-                        compression=None,
-                        wait_for_ready=None,
-                        timeout=None,
-                        metadata=None):
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
         return grpc.experimental.unary_unary(request, target, '/protos.AggregateServerOperator/AggregateFinish',
-                                             service__pb2.AggregateResult.SerializeToString,
-                                             service__pb2.Empty.FromString,
-                                             options, channel_credentials,
-                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            service__pb2.AggregateResult.SerializeToString,
+            service__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
 
 class AggregateServerAppStub(object):
@@ -333,15 +362,15 @@ class AggregateServerAppStub(object):
             channel: A grpc.Channel.
         """
         self.Aggregate = channel.unary_unary(
-            '/protos.AggregateServerApp/Aggregate',
-            request_serializer=service__pb2.AggregateParams.SerializeToString,
-            response_deserializer=service__pb2.Empty.FromString,
-        )
+                '/protos.AggregateServerApp/Aggregate',
+                request_serializer=service__pb2.AggregateParams.SerializeToString,
+                response_deserializer=service__pb2.Empty.FromString,
+                )
         self.TrainFinish = channel.unary_unary(
-            '/protos.AggregateServerApp/TrainFinish',
-            request_serializer=service__pb2.Empty.SerializeToString,
-            response_deserializer=service__pb2.Empty.FromString,
-        )
+                '/protos.AggregateServerApp/TrainFinish',
+                request_serializer=service__pb2.Empty.SerializeToString,
+                response_deserializer=service__pb2.Empty.FromString,
+                )
 
 
 class AggregateServerAppServicer(object):
@@ -362,57 +391,56 @@ class AggregateServerAppServicer(object):
 
 def add_AggregateServerAppServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        'Aggregate': grpc.unary_unary_rpc_method_handler(
-            servicer.Aggregate,
-            request_deserializer=service__pb2.AggregateParams.FromString,
-            response_serializer=service__pb2.Empty.SerializeToString,
-        ),
-        'TrainFinish': grpc.unary_unary_rpc_method_handler(
-            servicer.TrainFinish,
-            request_deserializer=service__pb2.Empty.FromString,
-            response_serializer=service__pb2.Empty.SerializeToString,
-        ),
+            'Aggregate': grpc.unary_unary_rpc_method_handler(
+                    servicer.Aggregate,
+                    request_deserializer=service__pb2.AggregateParams.FromString,
+                    response_serializer=service__pb2.Empty.SerializeToString,
+            ),
+            'TrainFinish': grpc.unary_unary_rpc_method_handler(
+                    servicer.TrainFinish,
+                    request_deserializer=service__pb2.Empty.FromString,
+                    response_serializer=service__pb2.Empty.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'protos.AggregateServerApp', rpc_method_handlers)
+            'protos.AggregateServerApp', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
+
  # This class is part of an EXPERIMENTAL API.
-
-
 class AggregateServerApp(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
     def Aggregate(request,
-                  target,
-                  options=(),
-                  channel_credentials=None,
-                  call_credentials=None,
-                  insecure=False,
-                  compression=None,
-                  wait_for_ready=None,
-                  timeout=None,
-                  metadata=None):
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
         return grpc.experimental.unary_unary(request, target, '/protos.AggregateServerApp/Aggregate',
-                                             service__pb2.AggregateParams.SerializeToString,
-                                             service__pb2.Empty.FromString,
-                                             options, channel_credentials,
-                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            service__pb2.AggregateParams.SerializeToString,
+            service__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def TrainFinish(request,
-                    target,
-                    options=(),
-                    channel_credentials=None,
-                    call_credentials=None,
-                    insecure=False,
-                    compression=None,
-                    wait_for_ready=None,
-                    timeout=None,
-                    metadata=None):
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
         return grpc.experimental.unary_unary(request, target, '/protos.AggregateServerApp/TrainFinish',
-                                             service__pb2.Empty.SerializeToString,
-                                             service__pb2.Empty.FromString,
-                                             options, channel_credentials,
-                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            service__pb2.Empty.SerializeToString,
+            service__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
