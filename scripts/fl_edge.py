@@ -90,6 +90,11 @@ def train_model(yml_path, namespace, trainStartedEvent, trainFinishedEvent, base
 
 
 class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
+    def IsDataValidated(self, request, context):
+        resp = service_pb2.Empty()
+        logging.info(f"Sending response: {resp}")
+        return resp
+
     def TrainInit(self, request, context):
         logging.info("TrainInit, reset the current epoch, increase the version")
         namespace.localModelPath = os.environ['LOCAL_MODEL_PATH']
@@ -143,7 +148,6 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
         global loop
         loop = False
         return service_pb2.Empty()
-
 
 def serve():
     logging.basicConfig(level=logging.DEBUG)
