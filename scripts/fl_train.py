@@ -7,6 +7,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
+from sklearn import metrics
 import logging
 import importlib
 from fl_enum import PackageLogMsg,LogLevel
@@ -114,8 +115,8 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
         test_kwargs.update(cuda_kwargs)
 
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
-    dataset1 = datasets.MNIST('./data', train=True, download=True, transform=transform)
-    dataset2 = datasets.MNIST('./data', train=False, transform=transform)
+    dataset1 = datasets.MNIST('/data', train=True, download=True, transform=transform)
+    dataset2 = datasets.MNIST('/data', train=False, transform=transform)
 
     if namespace is not None:
         namespace.dataset_size = len(dataset1)  #c
@@ -184,7 +185,38 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
         # (in order to make main process(fl_edge.py) knows where the weight of this epoch is by namespace)
         # ------------------------
 
-        namespace.metrics = {"123":123}
+        y_pred = []
+        y_true = []
+
+        for inputs, labels in test_loader:
+            inputs = inputs.to(device)
+            output = model(inputs) # Feed Network
+
+            output = (torch.max(torch.exp(output), 1)[1]).data.cpu().numpy()
+            y_pred.extend(output) # Save Prediction
+
+            labels = labels.data.cpu().numpy()
+            y_true.extend(labels) # Save Truth
+
+            confu = [[0,0],[0,0]]
+
+            cf_matrix = metrics.multilabel_confusion_matrix(y_true, y_pred)
+            for matrix in cf_matrix:
+                confu[0][0] = confu[0][0] + matrix[0][0]
+                confu[0][1] = confu[0][1] + matrix[0][1]
+                confu[1][0] = confu[1][0] + matrix[1][0]
+                confu[1][1] = confu[1][1] + matrix[1][1]
+
+            namespace.metrics = {
+                "epoch":epoch,
+                "basic/confusion_tn":confu[0][0],
+                "basic/confusion_fp":confu[0][1],
+                "basic/confusion_fn":confu[1][0],
+                "basic/confusion_tp":confu[1][1],
+                "datasetSize":len(test_loader.dataset),
+                "weight":1.0,
+            }
+
 
         # Save and Namespace
         if namespace is not None:
