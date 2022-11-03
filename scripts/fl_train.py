@@ -214,7 +214,7 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
                 "basic/confusion_fn":confu[1][0],
                 "basic/confusion_tp":confu[1][1],
                 "datasetSize":len(test_loader.dataset),
-                "weight":1.0,
+                "basic/weight":1.0,
             }
 
 
