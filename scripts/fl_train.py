@@ -114,9 +114,17 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
         train_kwargs.update(cuda_kwargs)
         test_kwargs.update(cuda_kwargs)
 
+    dataset1 = None
+    dataset2 = None
+    try:
+        logQueue.put(PackageLogMsg(LogLevel.INFO,"Loading training dataset .."))
+        dataset1 = datasets.MNIST('/data', train=True, download=False, transform=transform)
+        dataset2 = datasets.MNIST('/data', train=False, download=False, transform=transform)
+    except Exception as err:
+        logQueue.put(PackageLogMsg(LogLevel.ERROR,"Loading training failed .."))
+        return
+
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
-    dataset1 = datasets.MNIST('/data', train=True, download=True, transform=transform)
-    dataset2 = datasets.MNIST('/data', train=False, transform=transform)
 
     if namespace is not None:
         namespace.dataset_size = len(dataset1)  #c
@@ -134,8 +142,12 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
     # ------------------------
     logQueue.put({"level":"info", "message":"Initialization :Check if pretrained weight exist."})
     if hasPretrainedWeight is not None:
-        model.load_state_dict(torch.load(namespace.pretrainedModelPath)["state_dict"])
-        logQueue.put({"level":"info", "message":"Initialization :Pretrained weight loaded."})
+        try:
+            model.load_state_dict(torch.load(namespace.pretrainedModelPath)["state_dict"])
+            logQueue.put({"level":"info", "message":"Initialization :Pretrained weight is being loaded."})
+        except Exception as err:
+            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Loading pretrained failed .."))
+            return
     logQueue.put({"level":"info", "message":"Initialization :Pretrained weight not found."})
     # ------------------------
     # 2.Inform main process (fl_edge.py) that training initialization has been done.
@@ -175,8 +187,20 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
         # ------------------------
         # 5.Local training started: Start this epoch of training and validaiton.
         # ------------------------
-        train(args, model, device, train_loader, optimizer, epoch)
-        test(model, device, test_loader)
+        try:
+            train(args, model, device, train_loader, optimizer, epoch)
+            logQueue.put({"level":"info", "message":" :Local train is ongoing."})
+        except Exception as err:
+            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Local train is failed .."))
+            return
+
+        try:
+            test(model, device, test_loader)
+            logQueue.put({"level":"info", "message":" :Testing(validation) is ongoing."})
+        except Exception as err:
+            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Testing(validation) is is failed .."))
+            return
+
         scheduler.step()
 
         # ------------------------

@@ -9,7 +9,7 @@ import multiprocessing
 import os
 import shutil
 import time
-from fl_enum import UnPackageLogMsg
+from fl_enum import UnPackageLogMsg,LogLevel
 
 OPERATOR_URI = os.getenv("OPERATOR_URI") or "127.0.0.1:8787"
 APPLICATION_URI = "0.0.0.0:7878"
@@ -46,6 +46,10 @@ def logEventLoop(logQueue):
             logging.error(f"grpc error: {rpc_error}")
         except Exception as err:
             logging.error(f"got error: {err}")
+        if level == LogLevel.ERROR:
+            global loop
+            loop = False
+            return
 
 
 def train_model(yml_path, namespace, trainStartedEvent, trainFinishedEvent, base_model, local_model_dir, epochCount):
