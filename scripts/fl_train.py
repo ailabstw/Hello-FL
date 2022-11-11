@@ -141,14 +141,15 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
     # 1.Load pretrained weight if existed before traininig.
     # ------------------------
     logQueue.put({"level":"info", "message":"Initialization :Check if pretrained weight exist."})
-    if hasPretrainedWeight is not None:
+    if hasPretrainedWeight != None:
         try:
             model.load_state_dict(torch.load(namespace.pretrainedModelPath)["state_dict"])
             logQueue.put({"level":"info", "message":"Initialization :Pretrained weight is being loaded."})
         except Exception as err:
-            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Loading pretrained failed .."))
+            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Loading pretrained failed .." + err.__str__))
             return
-    logQueue.put({"level":"info", "message":"Initialization :Pretrained weight not found."})
+    else:
+        logQueue.put({"level":"info", "message":"Initialization :Pretrained weight not found."})
     # ------------------------
     # 2.Inform main process (fl_edge.py) that training initialization has been done.
     #   Set this event before entering training loop
@@ -160,17 +161,23 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
 
     logQueue.put(PackageLogMsg(LogLevel.INFO,"Initialization :initalization finished."))
 
+
+    logQueue.put(PackageLogMsg(LogLevel.WARNING,"Training :test warning."))
+
     for epoch in range(args.epochs):
         if epoch > 0:
             # ------------------------
             # 3.Wait starting event: Wait trainStartedEvent to be set and start to new epoch of local training.
             # ------------------------
             print("wait until new epoch training started ...")
+
+            logQueue.put(PackageLogMsg(LogLevel.INFO, "Wait until new epoch training started ..."))
+
             trainStartedEvent.wait()
             trainStartedEvent.clear()
-            print("Epoch ", epoch ," training starting !")
 
-            logQueue.put(PackageLogMsg(LogLevel.WARNING,"Training :test warning."))
+            logQueue.put(PackageLogMsg(LogLevel.INFO, "Epoch " + str(epoch) + " : training starting !"))
+            print("Epoch ", epoch ," training starting !")
 
             # ------------------------
             # 4.Load global model as pretraind: Load the newest global model weight as pretrained model weight.
@@ -182,7 +189,13 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
             # print("pretrained state_dict :", weight["state_dict"].keys())
 
             # 4-2:Load pretrained weight from global model
-            model.load_state_dict(torch.load(namespace.pretrainedModelPath)["state_dict"])
+
+            try:
+                model.load_state_dict(torch.load(namespace.pretrainedModelPath)["state_dict"])
+                logQueue.put({"level":"info", "message":" :loading global model weight.. "})
+            except Exception as err:
+                logQueue.put(PackageLogMsg(LogLevel.ERROR,"loading global model is failed ..: " + err.__str__))
+                return
 
         # ------------------------
         # 5.Local training started: Start this epoch of training and validaiton.
@@ -191,14 +204,14 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
             train(args, model, device, train_loader, optimizer, epoch)
             logQueue.put({"level":"info", "message":" :Local train is ongoing."})
         except Exception as err:
-            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Local train is failed .."))
+            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Local train is failed ..: " + err.__str__))
             return
 
         try:
             test(model, device, test_loader)
             logQueue.put({"level":"info", "message":" :Testing(validation) is ongoing."})
         except Exception as err:
-            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Testing(validation) is is failed .."))
+            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Testing(validation) is is failed ..: " + err.__str__))
             return
 
         scheduler.step()
@@ -246,8 +259,12 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
         if namespace is not None:
             logQueue.put(PackageLogMsg(LogLevel.INFO,"Training :trained finished. Start saving model weight"))
             namespace.epoch_path = f'epoch_{epoch}.ckpt'
+            try:
+                torch.save({'state_dict': model.state_dict()}, namespace.epoch_path)  # original
+            except Exception as err:
+                logQueue.put(PackageLogMsg(LogLevel.ERROR,"Saving model failed ..: " + err.__str__))
+                return
 
-            torch.save({'state_dict': model.state_dict()}, namespace.epoch_path)  # original
             logging.info(f"save to : [{namespace.epoch_path}]")
 
             # namespace.metrics = valid_metrics['0'].copy()
