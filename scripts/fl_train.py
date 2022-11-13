@@ -121,7 +121,7 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
         dataset1 = datasets.MNIST('/data', train=True, download=False, transform=transform)
         dataset2 = datasets.MNIST('/data', train=False, download=False, transform=transform)
     except Exception as err:
-        logQueue.put(PackageLogMsg(LogLevel.ERROR,"Loading training failed .."))
+        logQueue.put(PackageLogMsg(LogLevel.ERROR,"Loading datasets failed .. reason: "+ err.__str__))
         return
 
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
@@ -146,7 +146,7 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
             model.load_state_dict(torch.load(namespace.pretrainedModelPath)["state_dict"])
             logQueue.put({"level":"info", "message":"Initialization :Pretrained weight is being loaded."})
         except Exception as err:
-            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Loading pretrained failed .." + err.__str__))
+            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Loading pretrained failed ..reason: " + err.__str__))
             return
     else:
         logQueue.put({"level":"info", "message":"Initialization :Pretrained weight not found."})
