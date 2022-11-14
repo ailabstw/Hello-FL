@@ -116,15 +116,15 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
 
     dataset1 = None
     dataset2 = None
+    transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
+
     try:
         logQueue.put(PackageLogMsg(LogLevel.INFO,"Loading training dataset .."))
         dataset1 = datasets.MNIST('/data', train=True, download=False, transform=transform)
         dataset2 = datasets.MNIST('/data', train=False, download=False, transform=transform)
     except Exception as err:
-        logQueue.put(PackageLogMsg(LogLevel.ERROR,"Loading datasets failed .. reason: "+ err.__str__))
+        logQueue.put(PackageLogMsg(LogLevel.ERROR,"Loading datasets failed .. reason: " + str(err)))
         return
-
-    transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
 
     if namespace is not None:
         namespace.dataset_size = len(dataset1)  #c
@@ -146,7 +146,7 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
             model.load_state_dict(torch.load(namespace.pretrainedModelPath)["state_dict"])
             logQueue.put({"level":"info", "message":"Initialization :Pretrained weight is being loaded."})
         except Exception as err:
-            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Loading pretrained failed ..reason: " + err.__str__))
+            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Loading pretrained failed ..reason: " + str(err)))
             return
     else:
         logQueue.put({"level":"info", "message":"Initialization :Pretrained weight not found."})
@@ -194,7 +194,7 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
                 model.load_state_dict(torch.load(namespace.pretrainedModelPath)["state_dict"])
                 logQueue.put({"level":"info", "message":" :loading global model weight.. "})
             except Exception as err:
-                logQueue.put(PackageLogMsg(LogLevel.ERROR,"loading global model is failed ..: " + err.__str__))
+                logQueue.put(PackageLogMsg(LogLevel.ERROR,"loading global model is failed ..: " + str(err)))
                 return
 
         # ------------------------
@@ -204,14 +204,14 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
             train(args, model, device, train_loader, optimizer, epoch)
             logQueue.put({"level":"info", "message":" :Local train is ongoing."})
         except Exception as err:
-            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Local train is failed ..: " + err.__str__))
+            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Local train is failed ..: " + str(err)))
             return
 
         try:
             test(model, device, test_loader)
             logQueue.put({"level":"info", "message":" :Testing(validation) is ongoing."})
         except Exception as err:
-            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Testing(validation) is is failed ..: " + err.__str__))
+            logQueue.put(PackageLogMsg(LogLevel.ERROR,"Testing(validation) is is failed ..: " + str(err)))
             return
 
         scheduler.step()
@@ -262,7 +262,7 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
             try:
                 torch.save({'state_dict': model.state_dict()}, namespace.epoch_path)  # original
             except Exception as err:
-                logQueue.put(PackageLogMsg(LogLevel.ERROR,"Saving model failed ..: " + err.__str__))
+                logQueue.put(PackageLogMsg(LogLevel.ERROR,"Saving model failed ..: " + str(err)))
                 return
 
             logging.info(f"save to : [{namespace.epoch_path}]")
