@@ -38,6 +38,19 @@ In the last section, we have introduced the 3 parts of Ailabs FL framework : `Op
 
 ## Lifecycle of Ailabs FL framework
 
+<div align="center"><img src="./assets/msc_1.png" style="width:75%"></img></div>
+
+Here we begin with DataValidation phase,
+
+```plaintext
+  DataValidation: This is the first phase of FL's lifecycle, we need to check whether our training
+  dataset is valid or not in this phase. In this phase, a validation function will be called, and
+  you can do validation in this function. After you have validated your dataset, if it is correct
+  return grpc call with OK. If something wrong, report error through our log system.
+```
+
+After DataValidation phase done,
+
 ```plaintext
   TrainInit: In the beginning of Ailabs FL training, we will enter a phase called TrainInit.
   This is also the GRPC call name from Operator. We will do initialization at this phase
@@ -46,7 +59,6 @@ In the last section, we have introduced the 3 parts of Ailabs FL framework : `Op
 
   In this phase, our training communicate outside with 1 event : trainInitDoneEvent.
 ```
-<div align="center"><img src="./assets/msc_1.png" style="width:75%"></img></div>
 
 ```plaintext
   LocalTrain: In the second phase of Ailabs FL training, we enter a phase called LocalTrain.
