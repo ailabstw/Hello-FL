@@ -19,14 +19,14 @@ The `lifecycle of FL` and `the four GRPC API` will be introduced later..
 * **fl_train.py** : is now mainly consist of `Mnist` training code. Users with 3rd party training code will replace fl_train.py with their own training code(should also be renamed fl_train.py). And implement the machism need to be implement in current `Mnist`  of fl_train.py example to fit Ailabs FL framework. We will introduce this later.
 
 
-## The four GRPC API
+## The five GRPC API
 
 In the last section, we have introduced the 3 parts of Ailabs FL framework : `Operator`, `fl_edge.py` and `fl_train.py`. Grpc implementation have been done in `Operator` and `fl_edge.py` by Ailabs. So one who wants to integrate their model with Ailabs FL framework don't need to implement `The four GRPC API` by theirself but should know how it works. Then they will know when to implement machanism should be implemented in `fl_train.py`.
 
-* **DataValidation** : Before a FL
+* **DataValidation** : Before a FL really get started, we will need to do data's validation. When receive this grpc call, fl_edge.py will help to lauch a process which will call the function in the script file you have provided. Then after the validation process have been done. Return this grpc call with OK. If there is something wrong, one should use our log system to report error.
 
 
-* **TrainInit** : When a FL get started, `Operator` will call the TrainInit（GRPC call) in `fl_edge.py`, which directly means make the training initialized. Users need to initialize their training after this call have been triggered. `fl_edge.py` helps to handle this event, and will call the `init` in `fl_train.py` （the script which will be replaced with 3rd's training script if users want their 3rd party training to be in FL framwork). So users need to implement `init` in their own `fl_train.py` like example `Mnist` and do initiation in this `init` function. After users have done the initialization in `init` function, users should do trainInitDoneEvent.set() to inform outside that  `fl_edge.py` initialization have done and `fl_edge.py` will help to reply `Operator` this and we will go to next section : LocalTrain.
+* **TrainInit** : After data's validation have been done, FL get started, `Operator` will call the TrainInit（GRPC call) in `fl_edge.py`, which directly means make the training initialized. Users need to initialize their training after this call have been triggered. `fl_edge.py` helps to handle this event, and will call the `init` in `fl_train.py` （the script which will be replaced with 3rd's training script if users want their 3rd party training to be in FL framwork). So users need to implement `init` in their own `fl_train.py` like example `Mnist` and do initiation in this `init` function. After users have done the initialization in `init` function, users should do trainInitDoneEvent.set() to inform outside that  `fl_edge.py` initialization have done and `fl_edge.py` will help to reply `Operator` this and we will go to next section : LocalTrain.
 
 * **LocalTrain** : After users send trainInitDoneEvent.set(), `Operator` will later call LocalTrain（GRPC call)  in `fl_edge.py`. LocalTrain means to trigger one epoch of training. `fl_edge.py` have help to handle this GPPC and will do `trainStartedEvent.set()` event to `fl_train.py`, and users need to handle this event in `fl_train.py` to lauch a new epoch of training.And after the new epoch of training have done, do `trainFinishedEvent.set()` to inform `fl_edge.py` that this new epoch of training have done.One will do `trainStartedEvent.wait()` in the beginning of their training loop and reply with  `trainStartedEvent.clear()`.
 
@@ -61,8 +61,19 @@ In the last section, we have introduced the 3 parts of Ailabs FL framework : `Op
 
 ## FL Logging system in Ailabs FL framework
 
-<div align="left"><img src="./assets/logging_1.png" style="width:25%"></img></div>
+```python
+class LogLevel(Enum):
+    INFO = 1
+    WARNING = 2
+    ERROR = 3
 
+
+def PackageLogMsg(loglevel: LogLevel, message: string)-> object:
+    return {"level":loglevel.name, "message":message}
+
+def UnPackageLogMsg(log :object):
+    return log["level"] , log["message"]
+```
 
 Totally we have 3 types of logging: `INFO`,`WARNING` and `ERROR`.
 Users should pack their message with provided `PackageLogMsg` and put it to the provided queue. Like
