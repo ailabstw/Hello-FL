@@ -128,20 +128,20 @@ Ailabs's FL framework的訓練專案。
 
 ### 訓練流程
 
-####第一步(階段A)：
+#### 第一步(階段A)：
 `Operator` 將會發送一個gRPC請求 `DataValidate` 到 `fl_edge.py`，`fl_edge.py`此時會進行一個blocking的資料驗證(data validation)流程，我們目前給予的處理時程為1個小時，`fl_edge.py`處理完資料驗證後，不論資料是合法或者非法，`fl_edge.py`將會回傳OK(代表驗證已完成)給`Operator`。若驗證結果正確，將不再有近一步的動作，然而，若是資料有誤，我們會將錯誤訊息透過 `FL Logging system of Hello FL`來傳給`Operator`。
 
 
-####第二步(階段B)：
+#### 第二步(階段B)：
 `Operator` 在收到驗證完成的回報後，會發送一個gRPC請求`TrainInit`到`fl_edge.py`，`fl_edge.py`此時會進行一個blocking的訓練初始化流程(training initialization)流程，我們目前給予的處理時程為1個小時，這時候我們處理了訓練前的preprocess以及load pretrained model等操作，並啟動3元件中的`fl_train.py`(在python裡，我們以獨立的process形式將其啟動)，使`fl_train.py`在其他初始化完成後進入一個training 的for loop中，並使用python event控制(註A)其處在等待更近一步指令的狀態。`fl_edge.py`處理完訓練的初始化後，將會回傳OK(代表初始化已完成)`Operator`。 若初始化過程順利，將不再有近一步的動作。 然而，若是初始化過程有誤，我們會將錯誤訊息透過 `FL Logging system of Hello FL`來傳給`Operator`。
 
 
 <div align="center"><img src="./assets/msc_2.png" style="width:75%"></img></div>
 
-####第三步(階段C)：
+#### 第三步(階段C)：
 `Operator` 在收到訓練初始化完成的回報後，會發送一個gRPC請求`LocalTrain`到`fl_edge.py`，`fl_edge.py`會使用python event(註B)，傳送開始訓練的指令到`fl_train.py`。 此時`fl_train.py`會開始進行所謂的local training 並在結束的時候產出一個local training model weight(在hello FL中為weight.ckpt) 以及一組驗證資料 (validating metrics)，這組驗證資料將透過`Application`中的gRPC client(註C)傳送一個gRPC請求`LocalTrainFinish`給`Operator`。 `Operator`在收到`LocalTrainFinish` 會將local training model weight 以及 validating metrics進行處理，處理完後會再次發送`LocalTrain`的請求給`fl_edge.py`，此時`fl_edge.py`(註D)會開始新一輪的local training，如此反覆，直到達到指定的訓練輪數（註E)。
 
-####第四步(階段D)：
+#### 第四步(階段D)：
 `Operator` 在指定訓練輪數達到訓練計畫的數量後，將會發送 `TrainFinish`到`fl_edge.py`，此時 `fl_edge.py`將會把`fl_train.py` process 關閉，並將自己關閉。
 
 
