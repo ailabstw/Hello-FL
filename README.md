@@ -123,11 +123,9 @@ Ailabs's FL framework的訓練專案。
 在`Hello FL`之中，我們將框架裡的`gRPC handlder`實作成`fl_edge.py`而框架裡的`Training Process` 實作成 `fl_train.py`，之後將不再提醒這個很重要的對應關係。`fl_edge.py`以及`fl_train.py`這2個元件被我們包在一個container，我們之後會之稱為 `Application` 或 `App`(在圖中已有冠名)。
 在這裡，我們須理解`fl_edge.py`會是一個non-blocking的thread/process去接受或發送gRPC，而我們的`fl_train.py`則是另一個thread/process專注在處理data的preprocess或者是training等較繁雜的工作。
 
-
-<div align="center"><img src="./assets/msc_1.png" style="width:75%"></img></div>
-
 ### 訓練流程
 
+<div align="center"><img src="./assets/msc_1.png" style="width:75%"></img></div>
 #### 第一步(階段A)：
 `Operator` 將會發送一個gRPC請求 `DataValidate` 到 `fl_edge.py`，`fl_edge.py`此時會進行一個blocking的資料驗證(data validation)流程，我們目前給予的處理時程為1個小時，`fl_edge.py`處理完資料驗證後，不論資料是合法或者非法，`fl_edge.py`將會回傳OK(代表驗證已完成)給`Operator`。若驗證結果正確，將不再有近一步的動作，然而，若是資料有誤，我們會將錯誤訊息透過 `FL Logging system of Hello FL`來傳給`Operator`。
 
