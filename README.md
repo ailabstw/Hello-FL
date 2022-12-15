@@ -131,7 +131,7 @@ Hello-FL 主要由python撰寫，讓開發者學習Ailabs's FL framework，Hello
 #### 階段C
 `Operator` 在收到訓練初始化完成的回報後，會發送一個gRPC請求`LocalTrain`到`fl_edge.py`，`fl_edge.py`收到後會使用python event(註B)，通知`fl_train.py`開始訓練。 此時`fl_train.py`會開始進行local training 並在結束後產出a local model weight，在Hello-FL中為weight.ckpt，以及validation metrics，validation metrics將透過`LocalTrainFinish` gRPC請求傳送給`Operator`，model weight會透過由`Operator`和`Appication`mount同一個資料夾的方式，讓而`Operator`能存取產出的model weight。 `Operator`收到`LocalTrainFinish`後，會將local model weight 以及 validating metrics進行處理， 處理完後會再次發送`LocalTrain`的請求給`fl_edge.py`，此時`fl_edge.py`會開始新一輪的local training，如此反覆，直到達到指定的訓練輪數（註C)。
 
-#### 第四步(階段D)：
+#### 階段D
 `Operator` 在訓練輪數達到訓練計畫指定的數量後，將會發送 `TrainFinish`到`fl_edge.py`，此時 `fl_edge.py`將會把`fl_train.py` process 關閉，並將自己關閉。
 
 
