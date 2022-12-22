@@ -155,7 +155,7 @@ def logEventLoop(logQueue):
         obj = logQueue.get()
         channel = grpc.insecure_channel(OPERATOR_URI)
         stub = service_pb2_grpc.EdgeOperatorStub(channel)
-        level, message = UnPackageLogMsg(obj)
+        level, message = UnPackLogMsg(obj)
         logging.info(f"Send log level: {level} message: {message}")
         message = service_pb2.Log(
             level = level,
@@ -182,20 +182,20 @@ class LogLevel(Enum):
     WARNING = 2
     ERROR = 3
 
-def PackageLogMsg(loglevel: LogLevel, message: string)-> object:
+def PackLogMsg(loglevel: LogLevel, message: string)-> object:
     return {"level":loglevel.name, "message":message}
 
-def UnPackageLogMsg(log :object):
+def UnPackLogMsg(log :object):
     return log["level"] , log["message"]
 ```
 
 在 Hello-FL 之中
 
 There are 3 logging level types: `INFO`,`WARNING` and `ERROR`.
-Users should pack their message with the provided `PackageLogMsg` and put it to the provided queue. Like
+Users should pack their message with the provided `PackLogMsg` and put it to the provided queue. Like
 
 ```python
-logQueue.put(PackageLogMsg(LogLevel.INFO,'Training :trained finished. Start saving model weight'))
+logQueue.put(PackLogMsg(LogLevel.INFO,'Training :trained finished. Start saving model weight'))
 ```
 
 ## How to build Hello FL into a valid `Applicaiton` docker image

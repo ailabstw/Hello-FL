@@ -133,7 +133,7 @@ def logEventLoop(logQueue):
         obj = logQueue.get()
         channel = grpc.insecure_channel(OPERATOR_URI)
         stub = service_pb2_grpc.EdgeOperatorStub(channel)
-        level, message = UnPackageLogMsg(obj)
+        level, message = UnPackLogMsg(obj)
         logging.info(f"Send log level: {level} message: {message}")
         message = service_pb2.Log(
             level = level,

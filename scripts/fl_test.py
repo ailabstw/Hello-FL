@@ -10,7 +10,7 @@ from torch.optim.lr_scheduler import StepLR
 from sklearn import metrics
 import logging
 import importlib
-from fl_enum import PackageLogMsg,LogLevel
+from fl_enum import PackLogMsg,LogLevel
 
 
 

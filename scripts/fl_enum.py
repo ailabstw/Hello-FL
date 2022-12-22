@@ -7,8 +7,8 @@ class LogLevel(Enum):
     ERROR = 3
 
 
-def PackageLogMsg(loglevel: LogLevel, message: string)-> object:
+def PackLogMsg(loglevel: LogLevel, message: string)-> object:
     return {"level":loglevel.name, "message":message}
 
-def UnPackageLogMsg(log :object):
+def UnPackLogMsg(log :object):
     return log["level"] , log["message"]

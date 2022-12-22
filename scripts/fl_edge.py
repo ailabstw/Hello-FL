@@ -9,7 +9,7 @@ import multiprocessing
 import os
 import shutil
 import time
-from fl_enum import UnPackageLogMsg,LogLevel
+from fl_enum import UnPackLogMsg,LogLevel
 
 OPERATOR_URI = os.getenv("OPERATOR_URI") or "127.0.0.1:8787"
 APPLICATION_URI = "0.0.0.0:7878"
@@ -33,7 +33,7 @@ def logEventLoop(logQueue):
         obj = logQueue.get()
         channel = grpc.insecure_channel(OPERATOR_URI)
         stub = service_pb2_grpc.EdgeOperatorStub(channel)
-        level, message = UnPackageLogMsg(obj)
+        level, message = UnPackLogMsg(obj)
         logging.info(f"Send log level: {level} message: {message}")
         message = service_pb2.Log(
             level = level,
@@ -52,7 +52,7 @@ def logEventLoop(logQueue):
             return
 
 
-def train_model(yml_path, namespace, trainStartedEvent, trainFinishedEvent, base_model, local_model_dir, epochCount):
+def train_model(yml_path, namespace, trainStartedEvent, trainFinishedEvent, epochCount):
 
     logging.info(f"pretrained (global) model path: [{namespace.pretrainedModelPath}]")
     logging.info(f"local model path: [{namespace.localModelPath}]")
@@ -94,7 +94,7 @@ def train_model(yml_path, namespace, trainStartedEvent, trainFinishedEvent, base
 
 
 class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
-    def IsDataValidated(self, request, context):
+    def DataValidate(self, request, context):
         resp = service_pb2.Empty()
         logging.info(f"Sending response: {resp}")
         return resp
@@ -133,8 +133,6 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
                 namespace,
                 trainStartedEvent,
                 trainFinishedEvent,
-                request.baseModel,
-                request.localModel.path,
                 request.EpR,
             ),
         )
