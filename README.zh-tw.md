@@ -96,7 +96,7 @@ Hello-FL 專案由 python 撰寫, 使用 MNIST 作示範, 讓開發者能夠快�
 
 
 ### 階段 A 與階段 B
-<div align="center"><img src="./assets/msc_1.png" style="width:75%"></img></div>
+<div align="left"><img src="./assets/msc_1.png" style="width:75%"></img></div>
 
 #### 階段 A
 `Operator` 會發送 `DataValidate` gRPC 給 `gRPC handler` (fl_edge.py 內的 `EdgeAppServicer`), `gRPC handler` 收到後應進行資料驗證 (在我們的範例中並沒有實作), 預設的處理時限為1個小時. 完成資料驗證後, 不論資料是有效或無效, `gRPC handler` 都會回傳 OK, 代表驗證已完成. 若驗證結果為有效, 將不再有一步的動作; 若是資料無效, `gRPC handler` 會透過 logging interface 回傳 `ERROR` log 給 `Operator`.
@@ -110,7 +110,7 @@ Hello-FL 專案由 python 撰寫, 使用 MNIST 作示範, 讓開發者能夠快�
 `Training Process` 被叫起後, 會進入一個迴圈 (fl_train.py, #167), 並透過 python event 來做同步 (註A), 等待進一步指令. `gRPC handler` 處理完訓練的初始化後, 會回傳 OK 給`Operator`. 若是初始化過程有錯誤, 則應透過 logging interface 傳送 `ERROR` log 給 `Operator` (fl_train.py, #121).
 
 #### 階段 C
-<div align="center"><img src="./assets/msc_2.png" style="width:75%"></img></div>
+<div align="left"><img src="./assets/msc_2.png" style="width:75%"></img></div>
 
 `Operator` 在收到訓練初始化完成的回報後, 會發送 `LocalTrain` gRPC 給 `gRPC handler`, `gRPC handler` 收到後會透過 python event (註B) 通知 `Training Process` 開始訓練. 每一輪訓練結束後會產出本地模型權重 (weight.ckpt) 以及validation metrics; Validation metrics 會透過 `LocalTrainFinish` gRPC 回傳給 `Operator`, 而本地模型權重則是透過由 `Operator` 與 `Appication` mount 同資料夾的方式, 讓 `Operator` 能直接存取產出. `Operator`收 `LocalTrainFinish` gRPC 後, 會對本地模型權重與 validating metrics 進行處理, 處理完後會再次發送 `LocalTrain` gRPC 給 `gRPC handler`, 開始下一輪的本地訓練. 如此反覆, 直到達到指定的訓練輪數（註C).
 
