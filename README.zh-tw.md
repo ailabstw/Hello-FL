@@ -18,30 +18,30 @@ Taiwan AI Labs Federated Framework (以下簡稱 AILabs FL Framework) 是由台�
 
 在聯邦式學習的訓練過程中, `Operator` 會在各個階段向 `gRPC handler` 發送不同的 gRPC, 此時 `Operator` 為 gRPC client 而 `gRPC handler` 為 gRPC server.
 
-1. **DataValidate** (圖1 階段 A)
+1. **DataValidate** (圖1 階段 A)   
   這是聯邦式學習的第一個階段, `Operator` 會向 `gRPC handler` 發送 `DataValidate` gRPC. `gRPC handler` 收到後, 要驗證訓練資料是否有效. 如果資料有效則回傳 OK; 如果資料無效則必須透過 Logging 介面回報錯誤.
   <br/>
 
-2. **TrainInit** (圖1 階段 B)
+2. **TrainInit** (圖1 階段 B)   
   在 `DataValidate` 完成後, `Operator` 會向 `gRPC handler` 發送 `TrainInit` gRPC. `gRPC handler` 收到後, 要進行訓練初始化, 諸如資料前處理, 載入模型初始權重等等需要在正式開始訓練前完成的操作.
   <br/>
 
-3. **LocalTrain** (圖1 階段 C)
+3. **LocalTrain** (圖1 階段 C)   
   在 `TrainInit` 完成後, `Operator` 會向 `gRPC handler` 發送多次 `LocalTrain` gRPC, 而次數取決於訓練計畫 (Training Plan) 的設定. 每一個 `LocalTrain` gRPC 代表訓練過程中的一個 epoch, 而 `gRPC handler` 收到 `LocalTrain` gRPC 後, 會在 `Training Process` 啟動一次本地訓練, 訓練完成後產生一個本地模型權重以及一些驗證資料. 這些驗證資料要透過 `LocalTrainFinish` gRPC 介面回傳給 `Operator`.
   <br/>
 
-4. **TrainFinish** (圖1 階段 D)
+4. **TrainFinish** (圖1 階段 D)   
   當所有訓練回合完成後, `Operator` 會向 `gRPC handler` 發送 `TrainFinish` gRPC. `gRPC handler` 收到後, 則需要關閉 `Training Process` 以及 `gRPC handler`.
   <br/>
 
-5. **TrainInterrupt**
+5. **TrainInterrupt**   
   在一些特殊情況下, `Operator` 會向 `gRPC handler` 發送 `TrainInterrupt` gRPC. `gRPC handler` 收到後, 則需要關閉 `Training Process` 以及 `gRPC handler`.
 
 
 ## gRPC Client Interface
   除了上節所述的五個 gRPC server 介面, `gRPC handler` 還需要實作兩個 gRPC client 介面:
 
-1. **LocalTrainFinish**
+1. **LocalTrainFinish**   
     當每一輪的本地訓練完成後, `gRPC handler` 要向 `Operator` 發送 `LocalTrainFinish` gRPC 並將驗證資料回傳給 `Operator`.
     `LocalTrainFinish` 的定義如下:
     ```proto
@@ -61,7 +61,7 @@ Taiwan AI Labs Federated Framework (以下簡稱 AILabs FL Framework) 是由台�
     }
     ```
 
-2. **LogMessage** (logging interface in AILabs FL Framework)
+2. **LogMessage** (logging interface in AILabs FL Framework)   
     在 AILabs FL Framework 中, 定義了 `LogMessage` gRPC 介面做為 `gRPC handler` 與 `Training Process` 向 `Operator` 回傳 log 的管道.
     `LogMessage` 的定義如下:
     ```proto
