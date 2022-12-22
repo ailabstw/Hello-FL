@@ -1,5 +1,7 @@
 ## The Ailabs FL Framework
 
+*Read this in other languages: [English](README.md), [正體中文](README.zh-tw.md).*
+
 * This is how Ailabs FL Framework works.
 
 <div align="left"><img src="./assets/3rd_without_python.png" style="width:100%"></img></div>
