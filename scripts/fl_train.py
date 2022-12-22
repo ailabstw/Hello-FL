@@ -140,11 +140,12 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
     # ------------------------
     # 1.Load pretrained weight if existed before traininig.
     # ------------------------
-    logQueue.put({"level":"info", "message":"Initialization :Check if pretrained weight exist."})
+    logQueue.put(PackLogMsg(LogLevel.INFO,"Initialization :Check if pretrained weight exist."))
     if hasPretrainedWeight != None:
         try:
             model.load_state_dict(torch.load(namespace.pretrainedModelPath)["state_dict"])
-            logQueue.put({"level":"info", "message":"Initialization :Pretrained weight is being loaded."})
+            logQueue.put(PackLogMsg(LogLevel.INFO,"Initialization :Pretrained weight is being loaded."))
+
         except Exception as err:
             logQueue.put(PackLogMsg(LogLevel.ERROR,"Loading pretrained failed ..reason: " + str(err)))
             return
@@ -192,7 +193,7 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
 
             try:
                 model.load_state_dict(torch.load(namespace.pretrainedModelPath)["state_dict"])
-                logQueue.put({"level":"info", "message":" :loading global model weight.. "})
+                logQueue.put(PackLogMsg(LogLevel.INFO, "Loading global model weight.."))
             except Exception as err:
                 logQueue.put(PackLogMsg(LogLevel.ERROR,"loading global model is failed ..: " + str(err)))
                 return
@@ -202,14 +203,14 @@ def init(cofig_path, namespace, trainInitDoneEvent, trainStartedEvent, trainFini
         # ------------------------
         try:
             train(args, model, device, train_loader, optimizer, epoch)
-            logQueue.put({"level":"info", "message":" :Local train is ongoing."})
+            logQueue.put(PackLogMsg(LogLevel.INFO, "Local train is ongoing..."))
         except Exception as err:
             logQueue.put(PackLogMsg(LogLevel.ERROR,"Local train is failed ..: " + str(err)))
             return
 
         try:
             test(model, device, test_loader)
-            logQueue.put({"level":"info", "message":" :Testing(validation) is ongoing."})
+            logQueue.put(PackLogMsg(LogLevel.INFO, "Testing(validation) is ongoing..."))
         except Exception as err:
             logQueue.put(PackLogMsg(LogLevel.ERROR,"Testing(validation) is is failed ..: " + str(err)))
             return
