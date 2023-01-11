@@ -78,7 +78,7 @@ def train_model(yml_path, namespace, trainStartedEvent, trainFinishedEvent, epoc
         stub = service_pb2_grpc.EdgeOperatorStub(channel)
         logging.info("service_pb2_grpc.EdgeOperatorStub Done.")
         result = service_pb2.LocalTrainResult(
-            error=0, datasetSize=namespace.dataset_size, metrics=namespace.metrics
+            error=0, datasetSize=namespace.dataset_size, metadata=namespace.metadata, metrics=namespace.metrics
         )
         logging.info("service_pb2.LocalTrainResult Done.")
         response = stub.LocalTrainFinish(result, timeout=30)

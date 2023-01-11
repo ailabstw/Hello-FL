@@ -108,8 +108,8 @@ class EdgeAppStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.DataValidate = channel.unary_unary(
-                '/protos.EdgeApp/DataValidate',
+        self.IsDataValidated = channel.unary_unary(
+                '/protos.EdgeApp/IsDataValidated',
                 request_serializer=service__pb2.Empty.SerializeToString,
                 response_deserializer=service__pb2.Empty.FromString,
                 )
@@ -138,7 +138,7 @@ class EdgeAppStub(object):
 class EdgeAppServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def DataValidate(self, request, context):
+    def IsDataValidated(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -171,8 +171,8 @@ class EdgeAppServicer(object):
 
 def add_EdgeAppServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'DataValidate': grpc.unary_unary_rpc_method_handler(
-                    servicer.DataValidate,
+            'IsDataValidated': grpc.unary_unary_rpc_method_handler(
+                    servicer.IsDataValidated,
                     request_deserializer=service__pb2.Empty.FromString,
                     response_serializer=service__pb2.Empty.SerializeToString,
             ),
@@ -207,7 +207,7 @@ class EdgeApp(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def DataValidate(request,
+    def IsDataValidated(request,
             target,
             options=(),
             channel_credentials=None,
@@ -217,7 +217,7 @@ class EdgeApp(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/protos.EdgeApp/DataValidate',
+        return grpc.experimental.unary_unary(request, target, '/protos.EdgeApp/IsDataValidated',
             service__pb2.Empty.SerializeToString,
             service__pb2.Empty.FromString,
             options, channel_credentials,
