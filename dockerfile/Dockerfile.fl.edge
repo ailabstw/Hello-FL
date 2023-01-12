@@ -1,7 +1,7 @@
 FROM pytorch/pytorch:1.8.0-cuda11.1-cudnn8-runtime
 #RUN rm /etc/apt/sources.list.d/cuda.list
-RUN apt-key del 7fa2af80
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
+# RUN apt-key del 7fa2af80
+# RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
 RUN apt-get update && apt-get install -y openslide-tools ca-certificates
 COPY . /app
 RUN pip3 install -r /app/requirements.txt
