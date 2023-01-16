@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z\010.;protos',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rservice.proto\x12\x06protos\"\x07\n\x05\x45mpty\"%\n\x03Log\x12\r\n\x05level\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\"F\n\x0c\x45\x64geMetaData\x12\x13\n\x0b\x64\x61tasetSize\x18\x01 \x01(\x05\x12\r\n\x05\x65poch\x18\x02 \x01(\x05\x12\x12\n\nimportance\x18\x03 \x01(\x01\"\x1f\n\x10LocalTrainParams\x12\x0b\n\x03\x45pR\x18\x01 \x01(\x05\"\xc6\x03\n\x0f\x41ggregateParams\x12\x37\n\x0blocalModels\x18\n \x03(\x0b\x32\".protos.AggregateParams.LocalModel\x12@\n\x0f\x61ggregatedModel\x18\x0c \x01(\x0b\x32\'.protos.AggregateParams.AggregatedModel\x1a\x96\x02\n\nLocalModel\x12\x0c\n\x04path\x18\x07 \x01(\t\x12\x13\n\x0b\x64\x61tasetSize\x18\x08 \x01(\x05\x12\x42\n\x08metadata\x18\t \x03(\x0b\x32\x30.protos.AggregateParams.LocalModel.MetadataEntry\x12@\n\x07metrics\x18\x15 \x03(\x0b\x32/.protos.AggregateParams.LocalModel.MetricsEntry\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a.\n\x0cMetricsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x01:\x02\x38\x01\x1a\x1f\n\x0f\x41ggregatedModel\x12\x0c\n\x04path\x18\x0b \x01(\t\"\x86\x02\n\x10LocalTrainResult\x12-\n\x05\x65rror\x18\r \x01(\x0e\x32\x1e.protos.LocalTrainResult.Error\x12\x13\n\x0b\x64\x61tasetSize\x18\x0e \x01(\x05\x12&\n\x08metadata\x18\x0f \x01(\x0b\x32\x14.protos.EdgeMetaData\x12\x36\n\x07metrics\x18\x12 \x03(\x0b\x32%.protos.LocalTrainResult.MetricsEntry\x1a.\n\x0cMetricsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x01:\x02\x38\x01\"\x1e\n\x05\x45rror\x12\x0b\n\x07SUCCESS\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01\"\xc9\x02\n\x0f\x41ggregateResult\x12,\n\x05\x65rror\x18\x10 \x01(\x0e\x32\x1d.protos.AggregateResult.Error\x12\x37\n\x08metadata\x18\x11 \x03(\x0b\x32%.protos.AggregateResult.MetadataEntry\x12\x35\n\x07metrics\x18\x13 \x03(\x0b\x32$.protos.AggregateResult.MetricsEntry\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a.\n\x0cMetricsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x01:\x02\x38\x01\"7\n\x05\x45rror\x12\x0b\n\x07SUCCESS\x10\x00\x12\x17\n\x13\x41GGREGATE_CONDITION\x10\x01\x12\x08\n\x04\x46\x41IL\x10\x02\x32y\n\x0c\x45\x64geOperator\x12=\n\x10LocalTrainFinish\x12\x18.protos.LocalTrainResult\x1a\r.protos.Empty\"\x00\x12*\n\nLogMessage\x12\x0b.protos.Log\x1a\r.protos.Empty\"\x00\x32\x80\x02\n\x07\x45\x64geApp\x12.\n\x0c\x44\x61taValidate\x12\r.protos.Empty\x1a\r.protos.Empty\"\x00\x12\x37\n\nLocalTrain\x12\x18.protos.LocalTrainParams\x1a\r.protos.Empty\"\x00\x12+\n\tTrainInit\x12\r.protos.Empty\x1a\r.protos.Empty\"\x00\x12\x30\n\x0eTrainInterrupt\x12\r.protos.Empty\x1a\r.protos.Empty\"\x00\x12-\n\x0bTrainFinish\x12\r.protos.Empty\x1a\r.protos.Empty\"\x00\x32\x82\x01\n\x17\x41ggregateServerOperator\x12;\n\x0f\x41ggregateFinish\x12\x17.protos.AggregateResult\x1a\r.protos.Empty\"\x00\x12*\n\nLogMessage\x12\x0b.protos.Log\x1a\r.protos.Empty\"\x00\x32z\n\x12\x41ggregateServerApp\x12\x35\n\tAggregate\x12\x17.protos.AggregateParams\x1a\r.protos.Empty\"\x00\x12-\n\x0bTrainFinish\x12\r.protos.Empty\x1a\r.protos.Empty\"\x00\x42\nZ\x08.;protosb\x06proto3'
+  serialized_pb=b'\n\rservice.proto\x12\x06protos\"\x07\n\x05\x45mpty\"%\n\x03Log\x12\r\n\x05level\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\"B\n\x08MetaData\x12\x13\n\x0b\x64\x61tasetSize\x18\x01 \x01(\x05\x12\r\n\x05\x65poch\x18\x02 \x01(\x05\x12\x12\n\nimportance\x18\x03 \x01(\x01\"\x1f\n\x10LocalTrainParams\x12\x0b\n\x03\x45pR\x18\x01 \x01(\x05\"\xf5\x02\n\x0f\x41ggregateParams\x12\x37\n\x0blocalModels\x18\n \x03(\x0b\x32\".protos.AggregateParams.LocalModel\x12@\n\x0f\x61ggregatedModel\x18\x0c \x01(\x0b\x32\'.protos.AggregateParams.AggregatedModel\x1a\xc5\x01\n\nLocalModel\x12\x0c\n\x04path\x18\x07 \x01(\t\x12\x13\n\x0b\x64\x61tasetSize\x18\x08 \x01(\x05\x12\"\n\x08metadata\x18\t \x01(\x0b\x32\x10.protos.MetaData\x12@\n\x07metrics\x18\x15 \x03(\x0b\x32/.protos.AggregateParams.LocalModel.MetricsEntry\x1a.\n\x0cMetricsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x01:\x02\x38\x01\x1a\x1f\n\x0f\x41ggregatedModel\x12\x0c\n\x04path\x18\x0b \x01(\t\"\x82\x02\n\x10LocalTrainResult\x12-\n\x05\x65rror\x18\r \x01(\x0e\x32\x1e.protos.LocalTrainResult.Error\x12\x13\n\x0b\x64\x61tasetSize\x18\x0e \x01(\x05\x12\"\n\x08metadata\x18\x0f \x01(\x0b\x32\x10.protos.MetaData\x12\x36\n\x07metrics\x18\x12 \x03(\x0b\x32%.protos.LocalTrainResult.MetricsEntry\x1a.\n\x0cMetricsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x01:\x02\x38\x01\"\x1e\n\x05\x45rror\x12\x0b\n\x07SUCCESS\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01\"\x83\x02\n\x0f\x41ggregateResult\x12,\n\x05\x65rror\x18\x10 \x01(\x0e\x32\x1d.protos.AggregateResult.Error\x12\"\n\x08metadata\x18\x11 \x01(\x0b\x32\x10.protos.MetaData\x12\x35\n\x07metrics\x18\x13 \x03(\x0b\x32$.protos.AggregateResult.MetricsEntry\x1a.\n\x0cMetricsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x01:\x02\x38\x01\"7\n\x05\x45rror\x12\x0b\n\x07SUCCESS\x10\x00\x12\x17\n\x13\x41GGREGATE_CONDITION\x10\x01\x12\x08\n\x04\x46\x41IL\x10\x02\x32y\n\x0c\x45\x64geOperator\x12=\n\x10LocalTrainFinish\x12\x18.protos.LocalTrainResult\x1a\r.protos.Empty\"\x00\x12*\n\nLogMessage\x12\x0b.protos.Log\x1a\r.protos.Empty\"\x00\x32\x80\x02\n\x07\x45\x64geApp\x12.\n\x0c\x44\x61taValidate\x12\r.protos.Empty\x1a\r.protos.Empty\"\x00\x12\x37\n\nLocalTrain\x12\x18.protos.LocalTrainParams\x1a\r.protos.Empty\"\x00\x12+\n\tTrainInit\x12\r.protos.Empty\x1a\r.protos.Empty\"\x00\x12\x30\n\x0eTrainInterrupt\x12\r.protos.Empty\x1a\r.protos.Empty\"\x00\x12-\n\x0bTrainFinish\x12\r.protos.Empty\x1a\r.protos.Empty\"\x00\x32\x82\x01\n\x17\x41ggregateServerOperator\x12;\n\x0f\x41ggregateFinish\x12\x17.protos.AggregateResult\x1a\r.protos.Empty\"\x00\x12*\n\nLogMessage\x12\x0b.protos.Log\x1a\r.protos.Empty\"\x00\x32z\n\x12\x41ggregateServerApp\x12\x35\n\tAggregate\x12\x17.protos.AggregateParams\x1a\r.protos.Empty\"\x00\x12-\n\x0bTrainFinish\x12\r.protos.Empty\x1a\r.protos.Empty\"\x00\x42\nZ\x08.;protosb\x06proto3'
 )
 
 
@@ -44,8 +44,8 @@ _LOCALTRAINRESULT_ERROR = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=868,
-  serialized_end=898,
+  serialized_start=779,
+  serialized_end=809,
 )
 _sym_db.RegisterEnumDescriptor(_LOCALTRAINRESULT_ERROR)
 
@@ -74,8 +74,8 @@ _AGGREGATERESULT_ERROR = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1175,
-  serialized_end=1230,
+  serialized_start=1016,
+  serialized_end=1071,
 )
 _sym_db.RegisterEnumDescriptor(_AGGREGATERESULT_ERROR)
 
@@ -144,30 +144,30 @@ _LOG = _descriptor.Descriptor(
 )
 
 
-_EDGEMETADATA = _descriptor.Descriptor(
-  name='EdgeMetaData',
-  full_name='protos.EdgeMetaData',
+_METADATA = _descriptor.Descriptor(
+  name='MetaData',
+  full_name='protos.MetaData',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='datasetSize', full_name='protos.EdgeMetaData.datasetSize', index=0,
+      name='datasetSize', full_name='protos.MetaData.datasetSize', index=0,
       number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='epoch', full_name='protos.EdgeMetaData.epoch', index=1,
+      name='epoch', full_name='protos.MetaData.epoch', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='importance', full_name='protos.EdgeMetaData.importance', index=2,
+      name='importance', full_name='protos.MetaData.importance', index=2,
       number=3, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
@@ -186,7 +186,7 @@ _EDGEMETADATA = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=73,
-  serialized_end=143,
+  serialized_end=139,
 )
 
 
@@ -217,48 +217,10 @@ _LOCALTRAINPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=145,
-  serialized_end=176,
+  serialized_start=141,
+  serialized_end=172,
 )
 
-
-_AGGREGATEPARAMS_LOCALMODEL_METADATAENTRY = _descriptor.Descriptor(
-  name='MetadataEntry',
-  full_name='protos.AggregateParams.LocalModel.MetadataEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='protos.AggregateParams.LocalModel.MetadataEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='protos.AggregateParams.LocalModel.MetadataEntry.value', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'8\001',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=505,
-  serialized_end=552,
-)
 
 _AGGREGATEPARAMS_LOCALMODEL_METRICSENTRY = _descriptor.Descriptor(
   name='MetricsEntry',
@@ -294,8 +256,8 @@ _AGGREGATEPARAMS_LOCALMODEL_METRICSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=554,
-  serialized_end=600,
+  serialized_start=469,
+  serialized_end=515,
 )
 
 _AGGREGATEPARAMS_LOCALMODEL = _descriptor.Descriptor(
@@ -322,8 +284,8 @@ _AGGREGATEPARAMS_LOCALMODEL = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
       name='metadata', full_name='protos.AggregateParams.LocalModel.metadata', index=2,
-      number=9, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -337,7 +299,7 @@ _AGGREGATEPARAMS_LOCALMODEL = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_AGGREGATEPARAMS_LOCALMODEL_METADATAENTRY, _AGGREGATEPARAMS_LOCALMODEL_METRICSENTRY, ],
+  nested_types=[_AGGREGATEPARAMS_LOCALMODEL_METRICSENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -346,8 +308,8 @@ _AGGREGATEPARAMS_LOCALMODEL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=322,
-  serialized_end=600,
+  serialized_start=318,
+  serialized_end=515,
 )
 
 _AGGREGATEPARAMS_AGGREGATEDMODEL = _descriptor.Descriptor(
@@ -377,8 +339,8 @@ _AGGREGATEPARAMS_AGGREGATEDMODEL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=602,
-  serialized_end=633,
+  serialized_start=517,
+  serialized_end=548,
 )
 
 _AGGREGATEPARAMS = _descriptor.Descriptor(
@@ -415,8 +377,8 @@ _AGGREGATEPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=179,
-  serialized_end=633,
+  serialized_start=175,
+  serialized_end=548,
 )
 
 
@@ -454,8 +416,8 @@ _LOCALTRAINRESULT_METRICSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=554,
-  serialized_end=600,
+  serialized_start=469,
+  serialized_end=515,
 )
 
 _LOCALTRAINRESULT = _descriptor.Descriptor(
@@ -507,48 +469,10 @@ _LOCALTRAINRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=636,
-  serialized_end=898,
+  serialized_start=551,
+  serialized_end=809,
 )
 
-
-_AGGREGATERESULT_METADATAENTRY = _descriptor.Descriptor(
-  name='MetadataEntry',
-  full_name='protos.AggregateResult.MetadataEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='protos.AggregateResult.MetadataEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='protos.AggregateResult.MetadataEntry.value', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'8\001',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=505,
-  serialized_end=552,
-)
 
 _AGGREGATERESULT_METRICSENTRY = _descriptor.Descriptor(
   name='MetricsEntry',
@@ -584,8 +508,8 @@ _AGGREGATERESULT_METRICSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=554,
-  serialized_end=600,
+  serialized_start=469,
+  serialized_end=515,
 )
 
 _AGGREGATERESULT = _descriptor.Descriptor(
@@ -605,8 +529,8 @@ _AGGREGATERESULT = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
       name='metadata', full_name='protos.AggregateResult.metadata', index=1,
-      number=17, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
+      number=17, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -620,7 +544,7 @@ _AGGREGATERESULT = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_AGGREGATERESULT_METADATAENTRY, _AGGREGATERESULT_METRICSENTRY, ],
+  nested_types=[_AGGREGATERESULT_METRICSENTRY, ],
   enum_types=[
     _AGGREGATERESULT_ERROR,
   ],
@@ -630,13 +554,12 @@ _AGGREGATERESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=901,
-  serialized_end=1230,
+  serialized_start=812,
+  serialized_end=1071,
 )
 
-_AGGREGATEPARAMS_LOCALMODEL_METADATAENTRY.containing_type = _AGGREGATEPARAMS_LOCALMODEL
 _AGGREGATEPARAMS_LOCALMODEL_METRICSENTRY.containing_type = _AGGREGATEPARAMS_LOCALMODEL
-_AGGREGATEPARAMS_LOCALMODEL.fields_by_name['metadata'].message_type = _AGGREGATEPARAMS_LOCALMODEL_METADATAENTRY
+_AGGREGATEPARAMS_LOCALMODEL.fields_by_name['metadata'].message_type = _METADATA
 _AGGREGATEPARAMS_LOCALMODEL.fields_by_name['metrics'].message_type = _AGGREGATEPARAMS_LOCALMODEL_METRICSENTRY
 _AGGREGATEPARAMS_LOCALMODEL.containing_type = _AGGREGATEPARAMS
 _AGGREGATEPARAMS_AGGREGATEDMODEL.containing_type = _AGGREGATEPARAMS
@@ -644,18 +567,17 @@ _AGGREGATEPARAMS.fields_by_name['localModels'].message_type = _AGGREGATEPARAMS_L
 _AGGREGATEPARAMS.fields_by_name['aggregatedModel'].message_type = _AGGREGATEPARAMS_AGGREGATEDMODEL
 _LOCALTRAINRESULT_METRICSENTRY.containing_type = _LOCALTRAINRESULT
 _LOCALTRAINRESULT.fields_by_name['error'].enum_type = _LOCALTRAINRESULT_ERROR
-_LOCALTRAINRESULT.fields_by_name['metadata'].message_type = _EDGEMETADATA
+_LOCALTRAINRESULT.fields_by_name['metadata'].message_type = _METADATA
 _LOCALTRAINRESULT.fields_by_name['metrics'].message_type = _LOCALTRAINRESULT_METRICSENTRY
 _LOCALTRAINRESULT_ERROR.containing_type = _LOCALTRAINRESULT
-_AGGREGATERESULT_METADATAENTRY.containing_type = _AGGREGATERESULT
 _AGGREGATERESULT_METRICSENTRY.containing_type = _AGGREGATERESULT
 _AGGREGATERESULT.fields_by_name['error'].enum_type = _AGGREGATERESULT_ERROR
-_AGGREGATERESULT.fields_by_name['metadata'].message_type = _AGGREGATERESULT_METADATAENTRY
+_AGGREGATERESULT.fields_by_name['metadata'].message_type = _METADATA
 _AGGREGATERESULT.fields_by_name['metrics'].message_type = _AGGREGATERESULT_METRICSENTRY
 _AGGREGATERESULT_ERROR.containing_type = _AGGREGATERESULT
 DESCRIPTOR.message_types_by_name['Empty'] = _EMPTY
 DESCRIPTOR.message_types_by_name['Log'] = _LOG
-DESCRIPTOR.message_types_by_name['EdgeMetaData'] = _EDGEMETADATA
+DESCRIPTOR.message_types_by_name['MetaData'] = _METADATA
 DESCRIPTOR.message_types_by_name['LocalTrainParams'] = _LOCALTRAINPARAMS
 DESCRIPTOR.message_types_by_name['AggregateParams'] = _AGGREGATEPARAMS
 DESCRIPTOR.message_types_by_name['LocalTrainResult'] = _LOCALTRAINRESULT
@@ -676,12 +598,12 @@ Log = _reflection.GeneratedProtocolMessageType('Log', (_message.Message,), {
   })
 _sym_db.RegisterMessage(Log)
 
-EdgeMetaData = _reflection.GeneratedProtocolMessageType('EdgeMetaData', (_message.Message,), {
-  'DESCRIPTOR' : _EDGEMETADATA,
+MetaData = _reflection.GeneratedProtocolMessageType('MetaData', (_message.Message,), {
+  'DESCRIPTOR' : _METADATA,
   '__module__' : 'service_pb2'
-  # @@protoc_insertion_point(class_scope:protos.EdgeMetaData)
+  # @@protoc_insertion_point(class_scope:protos.MetaData)
   })
-_sym_db.RegisterMessage(EdgeMetaData)
+_sym_db.RegisterMessage(MetaData)
 
 LocalTrainParams = _reflection.GeneratedProtocolMessageType('LocalTrainParams', (_message.Message,), {
   'DESCRIPTOR' : _LOCALTRAINPARAMS,
@@ -693,13 +615,6 @@ _sym_db.RegisterMessage(LocalTrainParams)
 AggregateParams = _reflection.GeneratedProtocolMessageType('AggregateParams', (_message.Message,), {
 
   'LocalModel' : _reflection.GeneratedProtocolMessageType('LocalModel', (_message.Message,), {
-
-    'MetadataEntry' : _reflection.GeneratedProtocolMessageType('MetadataEntry', (_message.Message,), {
-      'DESCRIPTOR' : _AGGREGATEPARAMS_LOCALMODEL_METADATAENTRY,
-      '__module__' : 'service_pb2'
-      # @@protoc_insertion_point(class_scope:protos.AggregateParams.LocalModel.MetadataEntry)
-      })
-    ,
 
     'MetricsEntry' : _reflection.GeneratedProtocolMessageType('MetricsEntry', (_message.Message,), {
       'DESCRIPTOR' : _AGGREGATEPARAMS_LOCALMODEL_METRICSENTRY,
@@ -725,7 +640,6 @@ AggregateParams = _reflection.GeneratedProtocolMessageType('AggregateParams', (_
   })
 _sym_db.RegisterMessage(AggregateParams)
 _sym_db.RegisterMessage(AggregateParams.LocalModel)
-_sym_db.RegisterMessage(AggregateParams.LocalModel.MetadataEntry)
 _sym_db.RegisterMessage(AggregateParams.LocalModel.MetricsEntry)
 _sym_db.RegisterMessage(AggregateParams.AggregatedModel)
 
@@ -746,13 +660,6 @@ _sym_db.RegisterMessage(LocalTrainResult.MetricsEntry)
 
 AggregateResult = _reflection.GeneratedProtocolMessageType('AggregateResult', (_message.Message,), {
 
-  'MetadataEntry' : _reflection.GeneratedProtocolMessageType('MetadataEntry', (_message.Message,), {
-    'DESCRIPTOR' : _AGGREGATERESULT_METADATAENTRY,
-    '__module__' : 'service_pb2'
-    # @@protoc_insertion_point(class_scope:protos.AggregateResult.MetadataEntry)
-    })
-  ,
-
   'MetricsEntry' : _reflection.GeneratedProtocolMessageType('MetricsEntry', (_message.Message,), {
     'DESCRIPTOR' : _AGGREGATERESULT_METRICSENTRY,
     '__module__' : 'service_pb2'
@@ -764,15 +671,12 @@ AggregateResult = _reflection.GeneratedProtocolMessageType('AggregateResult', (_
   # @@protoc_insertion_point(class_scope:protos.AggregateResult)
   })
 _sym_db.RegisterMessage(AggregateResult)
-_sym_db.RegisterMessage(AggregateResult.MetadataEntry)
 _sym_db.RegisterMessage(AggregateResult.MetricsEntry)
 
 
 DESCRIPTOR._options = None
-_AGGREGATEPARAMS_LOCALMODEL_METADATAENTRY._options = None
 _AGGREGATEPARAMS_LOCALMODEL_METRICSENTRY._options = None
 _LOCALTRAINRESULT_METRICSENTRY._options = None
-_AGGREGATERESULT_METADATAENTRY._options = None
 _AGGREGATERESULT_METRICSENTRY._options = None
 
 _EDGEOPERATOR = _descriptor.ServiceDescriptor(
@@ -782,8 +686,8 @@ _EDGEOPERATOR = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=1232,
-  serialized_end=1353,
+  serialized_start=1073,
+  serialized_end=1194,
   methods=[
   _descriptor.MethodDescriptor(
     name='LocalTrainFinish',
@@ -818,8 +722,8 @@ _EDGEAPP = _descriptor.ServiceDescriptor(
   index=1,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=1356,
-  serialized_end=1612,
+  serialized_start=1197,
+  serialized_end=1453,
   methods=[
   _descriptor.MethodDescriptor(
     name='DataValidate',
@@ -884,8 +788,8 @@ _AGGREGATESERVEROPERATOR = _descriptor.ServiceDescriptor(
   index=2,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=1615,
-  serialized_end=1745,
+  serialized_start=1456,
+  serialized_end=1586,
   methods=[
   _descriptor.MethodDescriptor(
     name='AggregateFinish',
@@ -920,8 +824,8 @@ _AGGREGATESERVERAPP = _descriptor.ServiceDescriptor(
   index=3,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=1747,
-  serialized_end=1869,
+  serialized_start=1588,
+  serialized_end=1710,
   methods=[
   _descriptor.MethodDescriptor(
     name='Aggregate',
