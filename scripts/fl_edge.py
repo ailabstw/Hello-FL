@@ -97,6 +97,7 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
     def DataValidate(self, request, context):
         # for dry run mode
         metadict = dict(context.invocation_metadata())
+        logging.info(metadict)
         dryRun = metadict["draftRun"]
         if dryRun:
             resp = service_pb2.Empty()
