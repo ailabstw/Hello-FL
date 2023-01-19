@@ -182,13 +182,14 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
     def TrainFinish(self, _request, context):
         logging.info("TrainFinish")
         # for dry run mode
+        global loop
         metadict = dict(context.invocation_metadata())
         dryRun = metadict["draftrun"]
         if dryRun == 'true':
             resp = service_pb2.Empty()
             logging.info(f"TrainFinish: dry Run mode, return immediately")
+            loop = False
             return resp
-        global loop
         loop = False
         return service_pb2.Empty()
 
