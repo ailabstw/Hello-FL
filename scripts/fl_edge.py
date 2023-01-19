@@ -98,8 +98,8 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
         # for dry run mode
         metadict = dict(context.invocation_metadata())
         logging.info(metadict)
-        dryRun = metadict["draftRun"]
-        if dryRun:
+        dryRun = metadict["draftrun"]
+        if dryRun == 'true':
             resp = service_pb2.Empty()
             logging.info(f"DataValidate: dry Run mode, return immediately")
             return resp
@@ -113,8 +113,8 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
 
         # for dry run mode
         metadict = dict(context.invocation_metadata())
-        dryRun = metadict["draftRun"]
-        if dryRun:
+        dryRun = metadict["draftrun"]
+        if dryRun == 'true':
             resp = service_pb2.Empty()
             logging.info(f"TrainInit: dry Run mode, return immediately")
             return resp
@@ -147,8 +147,8 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
 
         # for dry run mode
         metadict = dict(context.invocation_metadata())
-        dryRun = metadict["draftRun"]
-        if dryRun:
+        dryRun = metadict["draftrun"]
+        if dryRun == 'true':
             resp = service_pb2.Empty()
             logging.info(f"LocalTrain: dry Run mode, return immediately")
             return resp
@@ -171,8 +171,8 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
     def TrainInterrupt(self, request, context):
         # for dry run mode
         metadict = dict(context.invocation_metadata())
-        dryRun = metadict["draftRun"]
-        if dryRun:
+        dryRun = metadict["draftrun"]
+        if dryRun == 'true':
             resp = service_pb2.Empty()
             logging.info(f"TrainInterrupt: dry Run mode, return immediately")
             return resp
@@ -183,8 +183,8 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
         logging.info("TrainFinish")
         # for dry run mode
         metadict = dict(context.invocation_metadata())
-        dryRun = metadict["draftRun"]
-        if dryRun:
+        dryRun = metadict["draftrun"]
+        if dryRun == 'true':
             resp = service_pb2.Empty()
             logging.info(f"TrainFinish: dry Run mode, return immediately")
             return resp
