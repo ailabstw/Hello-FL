@@ -98,11 +98,12 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
         # for dry run mode
         metadict = dict(context.invocation_metadata())
         logging.info(metadict)
-        dryRun = metadict["draftrun"]
-        if dryRun == 'true':
-            resp = service_pb2.Empty()
-            logging.info(f"DataValidate: dry Run mode, return immediately")
-            return resp
+        if "draftrun" in metadict:
+            dryRun = metadict["draftrun"]
+            if dryRun == 'true':
+                resp = service_pb2.Empty()
+                logging.info(f"DataValidate: dry Run mode, return immediately")
+                return resp
 
         resp = service_pb2.Empty()
         logging.info(f"Sending response: {resp}")
@@ -113,11 +114,12 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
 
         # for dry run mode
         metadict = dict(context.invocation_metadata())
-        dryRun = metadict["draftrun"]
-        if dryRun == 'true':
-            resp = service_pb2.Empty()
-            logging.info(f"TrainInit: dry Run mode, return immediately")
-            return resp
+        if "draftrun" in metadict:
+            dryRun = metadict["draftrun"]
+            if dryRun == 'true':
+                resp = service_pb2.Empty()
+                logging.info(f"TrainInit: dry Run mode, return immediately")
+                return resp
 
         namespace.localModelPath = os.environ['LOCAL_MODEL_PATH']
         namespace.pretrainedModelPath = os.environ['GLOBAL_MODEL_PATH']
@@ -147,11 +149,12 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
 
         # for dry run mode
         metadict = dict(context.invocation_metadata())
-        dryRun = metadict["draftrun"]
-        if dryRun == 'true':
-            resp = service_pb2.Empty()
-            logging.info(f"LocalTrain: dry Run mode, return immediately")
-            return resp
+        if "draftrun" in metadict:
+            dryRun = metadict["draftrun"]
+            if dryRun == 'true':
+                resp = service_pb2.Empty()
+                logging.info(f"LocalTrain: dry Run mode, return immediately")
+                return resp
 
         p = Process(
             target=train_model,
@@ -171,11 +174,12 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
     def TrainInterrupt(self, request, context):
         # for dry run mode
         metadict = dict(context.invocation_metadata())
-        dryRun = metadict["draftrun"]
-        if dryRun == 'true':
-            resp = service_pb2.Empty()
-            logging.info(f"TrainInterrupt: dry Run mode, return immediately")
-            return resp
+        if "draftrun" in metadict:
+            dryRun = metadict["draftrun"]
+            if dryRun == 'true':
+                resp = service_pb2.Empty()
+                logging.info(f"TrainInterrupt: dry Run mode, return immediately")
+                return resp
         # Not Implemented
         return service_pb2.Empty()
 
@@ -184,12 +188,13 @@ class EdgeAppServicer(service_pb2_grpc.EdgeAppServicer):
         # for dry run mode
         global loop
         metadict = dict(context.invocation_metadata())
-        dryRun = metadict["draftrun"]
-        if dryRun == 'true':
-            resp = service_pb2.Empty()
-            logging.info(f"TrainFinish: dry Run mode, return immediately")
-            loop = False
-            return resp
+        if "draftrun" in metadict:
+            dryRun = metadict["draftrun"]
+            if dryRun == 'true':
+                resp = service_pb2.Empty()
+                logging.info(f"TrainFinish: dry Run mode, return immediately")
+                loop = False
+                return resp
         loop = False
         return service_pb2.Empty()
 
