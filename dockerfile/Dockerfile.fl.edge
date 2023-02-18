@@ -20,7 +20,7 @@ RUN pip3 install -r /app/requirements.txt
 FROM gcr.io/distroless/python3
 COPY --from=build /usr/local/lib/python3.8/site-packages /usr/lib/python3.8/site-packages
 COPY --from=build /app /app
-ENV PYTHONPATH=/usr/lib/python3.8/site-packages
 
+ENV PYTHONPATH "${PYTHONPATH}:/app"
 WORKDIR /app
 CMD [ "python3", "scripts/fl_edge.py", "-o" , "/app/train_config.yml" ]
