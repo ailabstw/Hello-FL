@@ -23,3 +23,4 @@ COPY --from=build /app /app
 ENV PYTHONPATH=/usr/lib/python3.8/site-packages
 
 WORKDIR /app
+CMD [ "python3", "scripts/fl_edge.py", "-o" , "/app/train_config.yml" ]
