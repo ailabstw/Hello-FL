@@ -1,26 +1,14 @@
-# FROM bitnami/pytorch:1.13.1-debian-11-r20
-# USER root
-# RUN pip3 install protobuf==3.14.0 grpcio==1.34.0 grpcio-tools==1.33.1
-# COPY . /app
-# RUN pip3 install -r /app/requirements.txt
-
-# ENV PYTHONPATH "${PYTHONPATH}:/app"
-# WORKDIR /app
-# CMD [ "python3", "scripts/fl_edge.py", "-o" , "/app/train_config.yml" ]
-
 FROM python:3.8-slim as build
+RUN pip3 install protobuf==3.14.0 grpcio==1.34.0 grpcio-tools==1.33.1
+RUN pip3 install torch==1.4.0+cu92 torchvision==0.5.0+cu92 -f https://download.pytorch.org/whl/torch_stable.html
 COPY . /app
 WORKDIR /app
-RUN pip3 install --upgrade pip && \
-    pip3 install torch==1.5.1+cu101 torchvision==0.6.1+cu101 -f https://download.pytorch.org/whl/torch_stable.html && \
-    pip3 install protobuf==3.14.0 grpcio==1.34.0 grpcio-tools==1.33.1
 RUN pip3 install -r /app/requirements.txt
 
-# step2
-FROM gcr.io/distroless/python3
+FROM python:3.8-slim
 COPY --from=build /usr/local/lib/python3.8/site-packages /usr/lib/python3.8/site-packages
 COPY --from=build /app /app
 
-ENV PYTHONPATH "${PYTHONPATH}:/app"
+ENV PYTHONPATH=/usr/lib/python3.8/site-packages:/app
 WORKDIR /app
-CMD [ "scripts/fl_edge.py", "-o" , "/app/train_config.yml" ]
+CMD ["python3", "scripts/fl_edge.py", "-o" , "/app/train_config.yml" ]
